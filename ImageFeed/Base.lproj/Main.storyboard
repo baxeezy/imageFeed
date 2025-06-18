@@ -20,6 +20,56 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="jJU-gO-CCG">
                                 <rect key="frame" x="16" y="118" width="361" height="666"/>
                                 <color key="backgroundColor" name="YP Black"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ImagesListCell" rowHeight="190" id="6ng-TD-uZi" customClass="ImagesListCell" customModule="ImageFeed" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="50" width="361" height="190"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="6ng-TD-uZi" id="h4a-h7-mjm">
+                                            <rect key="frame" x="0.0" y="0.0" width="361" height="190"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="FW4-b1-oEF">
+                                                    <rect key="frame" x="0.0" y="0.0" width="361" height="190"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                            <integer key="value" value="16"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vOY-8k-gLQ">
+                                                    <rect key="frame" x="293" y="0.0" width="68" height="58"/>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain" image="No Active"/>
+                                                </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="27 августа 2022" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mZ6-mm-Et6" userLabel="Date Label">
+                                                    <rect key="frame" x="8" y="166" width="345" height="16"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <color key="textColor" name="YP White"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" name="YP Black"/>
+                                            <constraints>
+                                                <constraint firstAttribute="bottomMargin" secondItem="vOY-8k-gLQ" secondAttribute="bottom" constant="121" id="16W-NB-gmq"/>
+                                                <constraint firstAttribute="bottom" secondItem="mZ6-mm-Et6" secondAttribute="bottom" constant="8" id="2lM-2v-d5g"/>
+                                                <constraint firstItem="vOY-8k-gLQ" firstAttribute="top" secondItem="h4a-h7-mjm" secondAttribute="topMargin" constant="-11" id="EZc-Fk-8xq"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="FW4-b1-oEF" secondAttribute="trailing" constant="-20" id="LYh-Fh-kbn"/>
+                                                <constraint firstItem="FW4-b1-oEF" firstAttribute="top" secondItem="h4a-h7-mjm" secondAttribute="topMargin" constant="-11" id="TYj-J0-HcN"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="vOY-8k-gLQ" secondAttribute="trailing" constant="-20" id="WKu-dh-qGi"/>
+                                                <constraint firstItem="mZ6-mm-Et6" firstAttribute="leading" secondItem="h4a-h7-mjm" secondAttribute="leading" constant="8" id="WOm-wz-0Go"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="FW4-b1-oEF" secondAttribute="bottom" constant="-11" id="dHH-iB-rJ8"/>
+                                                <constraint firstAttribute="trailing" secondItem="mZ6-mm-Et6" secondAttribute="trailing" constant="8" id="pOC-dk-Fmv"/>
+                                                <constraint firstItem="vOY-8k-gLQ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="h4a-h7-mjm" secondAttribute="leadingMargin" id="r9R-CD-khI"/>
+                                                <constraint firstItem="FW4-b1-oEF" firstAttribute="leading" secondItem="h4a-h7-mjm" secondAttribute="leadingMargin" constant="-20" id="yln-4w-e38"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="cellImage" destination="FW4-b1-oEF" id="sPp-dK-gBN"/>
+                                            <outlet property="likeButton" destination="vOY-8k-gLQ" id="ced-nw-2U8"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
                                 <connections>
                                     <outlet property="dataSource" destination="BYZ-38-t0r" id="CKl-bY-hoX"/>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="Mze-Jk-GFk"/>
@@ -29,10 +79,10 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="YP Black"/>
                         <constraints>
-                            <constraint firstAttribute="bottomMargin" secondItem="jJU-gO-CCG" secondAttribute="bottom" id="IIz-MY-Xa4"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="jJU-gO-CCG" secondAttribute="trailing" id="Qqr-c6-JIB"/>
-                            <constraint firstItem="jJU-gO-CCG" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="gks-4N-are"/>
-                            <constraint firstItem="jJU-gO-CCG" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="wH0-eL-aAp"/>
+                            <constraint firstItem="jJU-gO-CCG" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="9Qc-Fx-Bz6"/>
+                            <constraint firstItem="jJU-gO-CCG" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="N0g-Uz-cqZ"/>
+                            <constraint firstItem="jJU-gO-CCG" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="QxH-hR-GMw"/>
+                            <constraint firstItem="jJU-gO-CCG" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottomMargin" id="Sd3-QB-hT9"/>
                         </constraints>
                     </view>
                     <connections>
@@ -41,12 +91,17 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="58" y="-2"/>
+            <point key="canvasLocation" x="57.251908396946561" y="-2.1126760563380285"/>
         </scene>
     </scenes>
     <resources>
+        <image name="0" width="1600" height="1059"/>
+        <image name="No Active" width="44" height="44"/>
         <namedColor name="YP Black">
             <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="YP White">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>
