@@ -72,6 +72,7 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="cellImage" destination="FW4-b1-oEF" id="sPp-dK-gBN"/>
+                                            <outlet property="dateLabel" destination="mZ6-mm-Et6" id="sPA-K4-5ta"/>
                                             <outlet property="likeButton" destination="vOY-8k-gLQ" id="ced-nw-2U8"/>
                                         </connections>
                                     </tableViewCell>
