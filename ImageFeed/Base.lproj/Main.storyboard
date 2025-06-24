@@ -139,7 +139,6 @@
                                             <outlet property="cellImage" destination="FW4-b1-oEF" id="sPp-dK-gBN"/>
                                             <outlet property="dateLabel" destination="mZ6-mm-Et6" id="sPA-K4-5ta"/>
                                             <outlet property="likeButton" destination="vOY-8k-gLQ" id="ced-nw-2U8"/>
-                                            <segue destination="Zuf-D2-hi2" kind="show" id="fXl-vt-5bN"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -161,6 +160,7 @@
                     <navigationItem key="navigationItem" id="YDm-C9-nLX"/>
                     <connections>
                         <outlet property="tableView" destination="jJU-gO-CCG" id="LgR-jC-acn"/>
+                        <segue destination="Zuf-D2-hi2" kind="show" identifier="ShowSingleImage" id="5ie-wK-guF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -222,7 +222,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="fgo-Cb-Aii">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fgo-Cb-Aii">
                                 <rect key="frame" x="16" y="168" width="370" height="589"/>
                             </imageView>
                         </subviews>
