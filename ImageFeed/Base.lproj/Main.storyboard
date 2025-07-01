@@ -212,7 +212,7 @@
                                     <outlet property="delegate" destination="Zuf-D2-hi2" id="VTH-5Z-O75"/>
                                 </connections>
                             </scrollView>
-                            <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7BY-Ix-BEj">
+                            <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7BY-Ix-BEj" userLabel="Tap Back Button">
                                 <rect key="frame" x="8" y="70" width="48" height="48"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="48" id="bro-i8-nRW"/>
@@ -226,14 +226,28 @@
                                     <action selector="didTapBackButton" destination="Zuf-D2-hi2" eventType="touchUpInside" id="wxL-Yz-etw"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fu8-cN-L60" userLabel="Sharing Button">
+                                <rect key="frame" x="176" y="773" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="05g-2j-D7e"/>
+                                    <constraint firstAttribute="height" constant="50" id="9dX-hv-84m"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="sharing_button"/>
+                                <connections>
+                                    <action selector="didTapShareButton" destination="Zuf-D2-hi2" eventType="touchUpInside" id="cCc-wU-Z5v"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="iDV-JM-xUL"/>
                         <color key="backgroundColor" name="YP Black"/>
                         <constraints>
                             <constraint firstItem="7BY-Ix-BEj" firstAttribute="leading" secondItem="iDV-JM-xUL" secondAttribute="leading" constant="8" id="1eq-QM-fFp"/>
                             <constraint firstAttribute="top" secondItem="8Cq-bn-VJV" secondAttribute="top" id="57a-wA-BaU"/>
+                            <constraint firstItem="iDV-JM-xUL" firstAttribute="bottom" secondItem="Fu8-cN-L60" secondAttribute="bottom" constant="17" id="BMT-Q1-TcV"/>
                             <constraint firstItem="7BY-Ix-BEj" firstAttribute="top" secondItem="iDV-JM-xUL" secondAttribute="top" constant="8" id="Gqt-8j-FyY"/>
                             <constraint firstItem="8Cq-bn-VJV" firstAttribute="bottom" secondItem="l4k-3o-8j0" secondAttribute="bottom" id="H7P-9B-lna"/>
+                            <constraint firstItem="Fu8-cN-L60" firstAttribute="centerX" secondItem="iDV-JM-xUL" secondAttribute="centerX" id="Lzb-75-Lc0"/>
                             <constraint firstItem="iDV-JM-xUL" firstAttribute="leading" secondItem="8Cq-bn-VJV" secondAttribute="leading" id="a6x-jB-xyR"/>
                             <constraint firstItem="8Cq-bn-VJV" firstAttribute="trailing" secondItem="iDV-JM-xUL" secondAttribute="trailing" id="cOa-gm-bdB"/>
                         </constraints>
@@ -254,6 +268,7 @@
         <image name="No Active" width="44" height="44"/>
         <image name="like_button_off" width="44" height="44"/>
         <image name="logout_button" width="44" height="44"/>
+        <image name="sharing_button" width="50" height="50"/>
         <image name="tab_editorial_active" width="30" height="30"/>
         <image name="tab_profile_active" width="30" height="30"/>
         <image name="tap_back_button" width="24" height="24"/>
