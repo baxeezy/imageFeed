@@ -16,59 +16,8 @@
                     <view key="view" contentMode="scaleToFill" id="vP5-Xp-w10">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="userpick" translatesAutoresizingMaskIntoConstraints="NO" id="jgo-b5-LRe" userLabel="Avatar Image View">
-                                <rect key="frame" x="16" y="156" width="70" height="70"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="jgo-b5-LRe" secondAttribute="height" multiplier="1:1" id="4nY-9H-tv9"/>
-                                    <constraint firstAttribute="width" constant="70" id="Heh-73-XLs"/>
-                                </constraints>
-                            </imageView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="lYi-dy-hCT">
-                                <rect key="frame" x="16" y="233.99999999999997" width="370" height="73.666666666666657"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Екатерина Новикова" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1GU-Z4-Lrw" userLabel="Name Label">
-                                        <rect key="frame" x="0.0" y="0.0" width="370" height="27"/>
-                                        <fontDescription key="fontDescription" name="SFPro-Bold" family="SF Pro" pointSize="23"/>
-                                        <color key="textColor" name="YP White"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@ekaterina_nov" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DlA-1U-M2W" userLabel="Login Name Label">
-                                        <rect key="frame" x="0.0" y="35" width="370" height="15.333333333333336"/>
-                                        <fontDescription key="fontDescription" name="SFPro-Regular" family="SF Pro" pointSize="13"/>
-                                        <color key="textColor" name="YP Gray"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hello, world!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bFZ-eA-BRe" userLabel="Description Label">
-                                        <rect key="frame" x="0.0" y="58.333333333333321" width="370" height="15.333333333333336"/>
-                                        <fontDescription key="fontDescription" name="SFPro-Regular" family="SF Pro" pointSize="13"/>
-                                        <color key="textColor" name="YP White"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                            </stackView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="79Z-81-bHw" userLabel="Logout Button">
-                                <rect key="frame" x="342" y="169" width="44" height="44"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="5OL-e3-4Ll"/>
-                                    <constraint firstAttribute="width" constant="44" id="VrG-v1-Yeq"/>
-                                </constraints>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" image="logout_button"/>
-                            </button>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="FeR-Ay-pO5"/>
                         <color key="backgroundColor" name="YP Black"/>
-                        <constraints>
-                            <constraint firstItem="jgo-b5-LRe" firstAttribute="leading" secondItem="FeR-Ay-pO5" secondAttribute="leading" constant="16" id="DeG-ag-43H"/>
-                            <constraint firstItem="lYi-dy-hCT" firstAttribute="top" secondItem="jgo-b5-LRe" secondAttribute="bottom" constant="8" id="Ina-1n-L22"/>
-                            <constraint firstItem="79Z-81-bHw" firstAttribute="centerY" secondItem="jgo-b5-LRe" secondAttribute="centerY" id="Je1-Pt-zAg"/>
-                            <constraint firstItem="jgo-b5-LRe" firstAttribute="leading" secondItem="lYi-dy-hCT" secondAttribute="leading" id="NNZ-E5-eFM"/>
-                            <constraint firstItem="lYi-dy-hCT" firstAttribute="leading" secondItem="FeR-Ay-pO5" secondAttribute="leading" constant="16" id="SDo-qg-7ZX"/>
-                            <constraint firstItem="jgo-b5-LRe" firstAttribute="top" secondItem="FeR-Ay-pO5" secondAttribute="top" constant="32" id="bgo-tz-hY7"/>
-                            <constraint firstItem="FeR-Ay-pO5" firstAttribute="trailing" secondItem="79Z-81-bHw" secondAttribute="trailing" constant="16" id="s2q-j2-Yve"/>
-                            <constraint firstItem="FeR-Ay-pO5" firstAttribute="trailing" secondItem="lYi-dy-hCT" secondAttribute="trailing" constant="16" id="wrl-Xk-KQQ"/>
-                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="" image="tab_profile_active" id="Mnf-wE-k6E"/>
                 </viewController>
@@ -267,17 +216,12 @@
         <image name="0" width="1600" height="1059"/>
         <image name="No Active" width="44" height="44"/>
         <image name="like_button_off" width="44" height="44"/>
-        <image name="logout_button" width="44" height="44"/>
         <image name="sharing_button" width="50" height="50"/>
         <image name="tab_editorial_active" width="30" height="30"/>
         <image name="tab_profile_active" width="30" height="30"/>
         <image name="tap_back_button" width="24" height="24"/>
-        <image name="userpick" width="70" height="70"/>
         <namedColor name="YP Black">
             <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="YP Gray">
-            <color red="0.68235294117647061" green="0.68627450980392157" blue="0.70588235294117652" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="YP White">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
