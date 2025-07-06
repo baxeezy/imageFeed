@@ -6,7 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		5D63C0082E1A7759009995B3 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D63C0072E1A7759009995B3 /* WebKit.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		5D63C0072E1A7759009995B3 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		5DCCCB062DFAFBEF0095F3C5 /* ImageFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -21,6 +26,16 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		5D63BFFC2E1958E5009995B3 /* Constants */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Constants;
+			sourceTree = "<group>";
+		};
+		5D63BFFF2E1A6602009995B3 /* Auth */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Auth;
+			sourceTree = "<group>";
+		};
 		5DCCCB082DFAFBEF0095F3C5 /* ImageFeed */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -36,16 +51,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D63C0082E1A7759009995B3 /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5D63C0062E1A7759009995B3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5D63C0072E1A7759009995B3 /* WebKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		5DCCCAFD2DFAFBEF0095F3C5 = {
 			isa = PBXGroup;
 			children = (
+				5D63BFFF2E1A6602009995B3 /* Auth */,
+				5D63BFFC2E1958E5009995B3 /* Constants */,
 				5DCCCB082DFAFBEF0095F3C5 /* ImageFeed */,
+				5D63C0062E1A7759009995B3 /* Frameworks */,
 				5DCCCB072DFAFBEF0095F3C5 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -74,6 +101,8 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				5D63BFFC2E1958E5009995B3 /* Constants */,
+				5D63BFFF2E1A6602009995B3 /* Auth */,
 				5DCCCB082DFAFBEF0095F3C5 /* ImageFeed */,
 			);
 			name = ImageFeed;
