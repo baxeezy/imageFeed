@@ -44,7 +44,7 @@ final class WebViewViewController: UIViewController {
             decidePolicyFor navigationAction: WKNavigationAction,
             decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
         ) {
-            if let code = code(from: navigationAction) { // code(:) возвращает кот авторизации, если он получен
+            if let code = code(from: navigationAction) { // code(:) возвращает код авторизации, если он получен
                 //TODO: process code
                 decisionHandler(.cancel) // если код успешно получен - отменяем навигационное действие (ведь мы уже все получили от webView)
             } else {
