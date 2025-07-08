@@ -68,7 +68,7 @@ final class SingleImageViewController: UIViewController {
     }
 }
 
-// MARK: - UIScrollViewDelegatw
+// MARK: - UIScrollViewDelegate
 
 extension SingleImageViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {

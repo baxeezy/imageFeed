@@ -11,17 +11,24 @@ protocol WebViewViewControllerDelegate: AnyObject {
 }
 
 final class WebViewViewController: UIViewController {
-
+    
     @IBOutlet private var webView: WKWebView!
-
+    @IBOutlet private var progressView: UIProgressView!
+    
+    @IBAction func didTapBackButton(_ sender: Any?) {
+        delegate?.webViewViewControllerDidCancel(self)
+    }
+    
     weak var delegate: WebViewViewControllerDelegate?
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         webView.navigationDelegate = self
         
         loadAuthView()
+        
+        updateProgress()
     }
     
     private func loadAuthView() {
@@ -45,32 +52,70 @@ final class WebViewViewController: UIViewController {
         let request = URLRequest(url: url)
         webView.load(request)
     }
-}
-    extension WebViewViewController: WKNavigationDelegate {
-        func webView(
-            _ webView: WKWebView,
-            decidePolicyFor navigationAction: WKNavigationAction,
-            decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
-        ) {
-            if let code = code(from: navigationAction) { // code(:) возвращает код авторизации, если он получен
-                delegate?.webViewViewController(self, didAuthenticateWithCode: code)
-                decisionHandler(.cancel) // если код успешно получен - отменяем навигационное действие (ведь мы уже все получили от webView)
-            } else {
-                decisionHandler(.allow) // если код не получен, разрешаем навигационное действие. Возможно, пользователь просто переходит на новую страницу в рамках процесса авторизации.
-            }
-        }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        private func code(from navigationAction: WKNavigationAction) -> String? {
-            if
-                let url = navigationAction.request.url,  // получаем из навигационного действия URL
-                let urlComponents = URLComponents(string: url.absoluteString), //создаем структуру URLComponents. Теперь мы получаем значения из компонентов из URL (раньше формировали)
-                urlComponents.path == "/oauth/authorize/native",  // совпадает ли адрес запроса с адресом получения
-                let items = urlComponents.queryItems, // проверяем, есть ли компоненты запроса
-                let codeItem = items.first(where: { $0.name == "code" }) // ищем в массиве такой элемент, которого значение "code"
-            {
-                return codeItem.value //возвращаем его значение, иначе nil
-            } else {
-                return nil
-            }
+        webView.addObserver(
+            self,
+            forKeyPath: #keyPath(WKWebView.estimatedProgress),
+            options: .new,
+            context: nil)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        webView.removeObserver(
+            self,
+            forKeyPath: #keyPath(WKWebView.estimatedProgress),
+            context: nil)
+    }
+    
+    override func observeValue(
+        forKeyPath keyPath: String?,
+        of object: Any?,
+        change: [NSKeyValueChangeKey: Any]?,
+        context: UnsafeMutableRawPointer?
+    ) {
+        if keyPath == #keyPath(WKWebView.estimatedProgress) {
+            updateProgress()
+        } else {
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
+    }
+    
+    private func updateProgress() {
+        progressView.progress = Float(webView.estimatedProgress)
+        progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
+    }
+}
+
+extension WebViewViewController: WKNavigationDelegate {
+    func webView(
+        _ webView: WKWebView,
+        decidePolicyFor navigationAction: WKNavigationAction,
+        decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
+    ) {
+        if let code = code(from: navigationAction) { // code(:) возвращает код авторизации, если он получен
+            delegate?.webViewViewController(self, didAuthenticateWithCode: code)
+            decisionHandler(.cancel) // если код успешно получен - отменяем навигационное действие (ведь мы уже все получили от webView)
+        } else {
+            decisionHandler(.allow) // если код не получен, разрешаем навигационное действие. Возможно, пользователь просто переходит на новую страницу в рамках процесса авторизации.
+        }
+    }
+        
+    private func code(from navigationAction: WKNavigationAction) -> String? {
+        if
+            let url = navigationAction.request.url,  // получаем из навигационного действия URL
+            let urlComponents = URLComponents(string: url.absoluteString), //создаем структуру URLComponents. Теперь мы получаем значения из компонентов из URL (раньше формировали)
+            urlComponents.path == "/oauth/authorize/native",  // совпадает ли адрес запроса с адресом получения
+            let items = urlComponents.queryItems, // проверяем, есть ли компоненты запроса
+            let codeItem = items.first(where: { $0.name == "code" }) // ищем в массиве такой элемент, которого значение "code"
+        {
+            return codeItem.value //возвращаем его значение, иначе nil
+        } else {
+            return nil
+        }
+    }
 }

@@ -1,18 +1,31 @@
 import UIKit
 
+// MARK: - AuthViewController
+
 final class AuthViewController: UIViewController {
+  
+    // MARK: - IBOutlets
     
     @IBOutlet weak private var logoView: UIView!
-    @IBAction private func didTapLogoButton() {
-    }
+  
+    // MARK: - Private Properties
     
     private let showWebViewSegueIdentifier = "ShowWebView"
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureBackButton()
     }
+    
+    // MARK: - IBActions
+    
+    @IBAction private func didTapLogoButton() {
+    }
+    
+    // MARK: - Override Methods
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showWebViewSegueIdentifier {
@@ -28,6 +41,8 @@ final class AuthViewController: UIViewController {
         }
     }
     
+    // MARK: - Private Methods
+    
    private func configureBackButton() {
         navigationController?.navigationBar.backIndicatorImage = UIImage(named: "nav_back_button")
         navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "nav_back_button")
@@ -35,6 +50,8 @@ final class AuthViewController: UIViewController {
         navigationItem.backBarButtonItem?.tintColor = UIColor(named :"YP Black")
     }
 }
+
+// MARK: - WebViewViewControllerDelegate
 
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
@@ -44,6 +61,4 @@ extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
         vc.dismiss(animated: true)
     }
-    
-    
 }
