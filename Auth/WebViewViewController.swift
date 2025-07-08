@@ -1,24 +1,32 @@
 import UIKit
 import WebKit
 
+enum WebViewConstants {
+    static let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
+}
+
+protocol WebViewViewControllerDelegate: AnyObject {
+    func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String)
+    func webViewViewControllerDidCancel(_ vc: WebViewViewController)
+}
+
 final class WebViewViewController: UIViewController {
-    
+
     @IBOutlet private var webView: WKWebView!
-    
+
+    weak var delegate: WebViewViewControllerDelegate?
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loadAuthView()
         webView.navigationDelegate = self
-    }
-    
-    enum WebViewConstants {
-        static let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
+        
+        loadAuthView()
     }
     
     private func loadAuthView() {
         guard var urlComponents = URLComponents(string: WebViewConstants.unsplashAuthorizeURLString) else {
-            print("urlComponents не прошел проверку")
+            assertionFailure("Failed to parsing URL")
             return
         }
         
@@ -30,7 +38,7 @@ final class WebViewViewController: UIViewController {
         ]
         
         guard let url = urlComponents.url else {
-            print("url не прошел проверку")
+            assertionFailure("URL is different")
             return
         }
         
@@ -39,13 +47,13 @@ final class WebViewViewController: UIViewController {
     }
 }
     extension WebViewViewController: WKNavigationDelegate {
-        private func webView(
-            _webView: WKWebView,
+        func webView(
+            _ webView: WKWebView,
             decidePolicyFor navigationAction: WKNavigationAction,
             decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
         ) {
             if let code = code(from: navigationAction) { // code(:) возвращает код авторизации, если он получен
-                //TODO: process code
+                delegate?.webViewViewController(self, didAuthenticateWithCode: code)
                 decisionHandler(.cancel) // если код успешно получен - отменяем навигационное действие (ведь мы уже все получили от webView)
             } else {
                 decisionHandler(.allow) // если код не получен, разрешаем навигационное действие. Возможно, пользователь просто переходит на новую страницу в рамках процесса авторизации.
