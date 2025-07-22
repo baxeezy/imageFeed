@@ -3,6 +3,8 @@ import UIKit
 // MARK: - AuthViewController
 final class AuthViewController: UIViewController {
   
+    weak var delegate: AuthViewControllerDelegate?
+
     // MARK: - IBOutlets
     @IBOutlet weak private var logoView: UIView!
   
@@ -48,17 +50,14 @@ final class AuthViewController: UIViewController {
 // MARK: - WebViewViewControllerDelegate
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        // Вызываем запрос для получения токена
+        vc.dismiss(animated: true)
         OAuth2Service.shared.fetchOAuthToken(code: code) { result in
-            // Гарантируем возврат на главный поток
             DispatchQueue.main.async {
                 switch result {
                 case .success(let token):
-                    // Токен успешно получен (уже сохранен в OAuth2TokenStorage)
+                    self.delegate?.didAuthenticate(self)
                     print("✅ Токен получен: \(token)")
-                    
                 case .failure(let error):
-                    // Обработка ошибок
                     print("🛑 Ошибка получения токена: \(error)")
                 }
             }
@@ -69,3 +68,9 @@ extension AuthViewController: WebViewViewControllerDelegate {
         vc.dismiss(animated: true)
     }
 }
+
+// MARK: - AuthViewControllerDelegate
+protocol AuthViewControllerDelegate: AnyObject {
+    func didAuthenticate(_ vc: AuthViewController)
+}
+
