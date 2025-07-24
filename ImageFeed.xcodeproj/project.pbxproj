@@ -6,12 +6,17 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		5D63C0082E1A7759009995B3 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D63C0072E1A7759009995B3 /* WebKit.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		5D63C0072E1A7759009995B3 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		5DCCCB062DFAFBEF0095F3C5 /* ImageFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		5DCCCB182DFAFBF10095F3C5 /* Exceptions for "ImageFeed" folder in "ImageFeed" target */ = {
+		5D63C0C42E22C504009995B3 /* Exceptions for "ImageFeed" folder in "ImageFeed" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -24,7 +29,7 @@
 		5DCCCB082DFAFBEF0095F3C5 /* ImageFeed */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				5DCCCB182DFAFBF10095F3C5 /* Exceptions for "ImageFeed" folder in "ImageFeed" target */,
+				5D63C0C42E22C504009995B3 /* Exceptions for "ImageFeed" folder in "ImageFeed" target */,
 			);
 			path = ImageFeed;
 			sourceTree = "<group>";
@@ -36,16 +41,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D63C0082E1A7759009995B3 /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5D63C0062E1A7759009995B3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5D63C0072E1A7759009995B3 /* WebKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		5DCCCAFD2DFAFBEF0095F3C5 = {
 			isa = PBXGroup;
 			children = (
 				5DCCCB082DFAFBEF0095F3C5 /* ImageFeed */,
+				5D63C0062E1A7759009995B3 /* Frameworks */,
 				5DCCCB072DFAFBEF0095F3C5 /* Products */,
 			);
 			sourceTree = "<group>";
