@@ -2,16 +2,30 @@ import UIKit
 
 final class OAuth2Service {
     static let shared = OAuth2Service()
-    private init() {}
+    
     private var task: URLSessionTask?
     private var lastCode: String?
     
-    func fetchOAuthToken(code: String, completion: @escaping (Result<String, NetworkError>) -> Void
-        ) {
+    private(set) var authToken: String? {
+        get {
+            return OAuth2TokenStorage.shared.token
+        }
+        set {
+            OAuth2TokenStorage.shared.token = newValue
+        }
+    }
+    
+    private init() {}
+
+    func fetchOAuthToken(code: String, completion: @escaping (Result<String, NetworkError>) -> Void) {
+        assert(Thread.isMainThread)
+        if task != nil {
             guard lastCode != code else {
                 completion(.failure(.invalidRequest))
                 return
             }
+        }
+        
             lastCode = code
             guard let request = makeOAuthTokenRequest(code: code) else {
                 completion(.failure(.invalidRequest))
@@ -39,8 +53,10 @@ final class OAuth2Service {
 
     private func makeOAuthTokenRequest(code: String) -> URLRequest? {
         guard var urlComponents = URLComponents(string: "https://unsplash.com/oauth/token") else {
+            assertionFailure("Failed to create URL")
             return nil
         }
+        
         urlComponents.queryItems = [
             URLQueryItem(name: "client_id", value: Constants.accessKey),
             URLQueryItem(name: "client_secret", value: Constants.secretKey),

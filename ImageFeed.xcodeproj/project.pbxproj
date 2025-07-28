@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		5D63C0082E1A7759009995B3 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D63C0072E1A7759009995B3 /* WebKit.framework */; };
 		5D99BF352E37734700831BDC /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 5D99BF342E37734700831BDC /* ProgressHUD */; };
+		5D99BF672E37765000831BDC /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 5DA5053C2E335A7700565E8C /* ProgressHUD */; };
+		5D99BF682E37765000831BDC /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 5DA505402E335C6500565E8C /* ProgressHUD */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +44,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D99BF682E37765000831BDC /* ProgressHUD in Frameworks */,
+				5D99BF672E37765000831BDC /* ProgressHUD in Frameworks */,
 				5D63C0082E1A7759009995B3 /* WebKit.framework in Frameworks */,
 				5D99BF352E37734700831BDC /* ProgressHUD in Frameworks */,
 			);
@@ -179,7 +183,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
-				IPHONEOS_DEPLOYMENT_TARGET = "iOS 13.0";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -211,7 +215,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
-				IPHONEOS_DEPLOYMENT_TARGET = "iOS 13.0";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
