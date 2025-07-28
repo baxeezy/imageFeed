@@ -8,8 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5D63C0082E1A7759009995B3 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D63C0072E1A7759009995B3 /* WebKit.framework */; };
-		5DA5053D2E335A7700565E8C /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 5DA5053C2E335A7700565E8C /* ProgressHUD */; };
-		5DA505412E335C6500565E8C /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 5DA505402E335C6500565E8C /* ProgressHUD */; };
+		5D99BF352E37734700831BDC /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 5D99BF342E37734700831BDC /* ProgressHUD */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,9 +42,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5DA505412E335C6500565E8C /* ProgressHUD in Frameworks */,
 				5D63C0082E1A7759009995B3 /* WebKit.framework in Frameworks */,
-				5DA5053D2E335A7700565E8C /* ProgressHUD in Frameworks */,
+				5D99BF352E37734700831BDC /* ProgressHUD in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,6 +97,7 @@
 			packageProductDependencies = (
 				5DA5053C2E335A7700565E8C /* ProgressHUD */,
 				5DA505402E335C6500565E8C /* ProgressHUD */,
+				5D99BF342E37734700831BDC /* ProgressHUD */,
 			);
 			productName = ImageFeed;
 			productReference = 5DCCCB062DFAFBEF0095F3C5 /* ImageFeed.app */;
@@ -132,7 +131,7 @@
 			mainGroup = 5DCCCAFD2DFAFBEF0095F3C5;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				5DA5053B2E335A7700565E8C /* XCLocalSwiftPackageReference "ImageFeed/ProgressHUD-14.1.4" */,
+				5D99BF332E37734700831BDC /* XCRemoteSwiftPackageReference "ProgressHUD" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5DCCCB072DFAFBEF0095F3C5 /* Products */;
@@ -180,7 +179,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = "iOS 13.0";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -212,7 +211,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = "iOS 13.0";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -282,7 +281,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = "iOS 13.0";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -340,7 +339,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = "iOS 13.0";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -373,14 +372,23 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		5DA5053B2E335A7700565E8C /* XCLocalSwiftPackageReference "ImageFeed/ProgressHUD-14.1.4" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = "ImageFeed/ProgressHUD-14.1.4";
+/* Begin XCRemoteSwiftPackageReference section */
+		5D99BF332E37734700831BDC /* XCRemoteSwiftPackageReference "ProgressHUD" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/relatedcode/ProgressHUD.git";
+			requirement = {
+				kind = exactVersion;
+				version = 14.1.4;
+			};
 		};
-/* End XCLocalSwiftPackageReference section */
+/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		5D99BF342E37734700831BDC /* ProgressHUD */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5D99BF332E37734700831BDC /* XCRemoteSwiftPackageReference "ProgressHUD" */;
+			productName = ProgressHUD;
+		};
 		5DA5053C2E335A7700565E8C /* ProgressHUD */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ProgressHUD;
