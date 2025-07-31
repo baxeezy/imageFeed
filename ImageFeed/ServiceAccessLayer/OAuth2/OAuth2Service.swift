@@ -5,6 +5,7 @@ final class OAuth2Service {
     
     private var task: URLSessionTask?
     private var lastCode: String?
+    private let urlSession = URLSession.shared
     
     private(set) var authToken: String? {
         get {
@@ -33,7 +34,7 @@ final class OAuth2Service {
             }
             task?.cancel()
             
-            task = URLSession.shared.data(for: request) { result in
+            task = urlSession.data(for: request) { result in
                 switch result {
                 case .success(let data):
                     do {

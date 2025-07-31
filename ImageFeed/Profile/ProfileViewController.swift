@@ -8,15 +8,37 @@ final class ProfileViewController: UIViewController {
     private var profileDescription: UILabel!
     private var logoutButton: UIButton!
     
+    private let profileService = ProfileService()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         createUI()
         setupConstraints()
+        
+        profileService.fetchProfile(Constants.accessKey) { result in
+            switch result {
+            case .success(let profile):
+                self.updateProfileDetails(with: profile)
+            case .failure(let error):
+                print("Error \(error)")
+            }
+        }
     }
     
 @objc private func didTapButton() {
     }
     
+    private func updateProfileDetails(with profile: Profile) {
+        profileName.text = profile.name.isEmpty
+        ? "Имя не указано"
+        : profile.username
+        profileNickname.text = profile.loginName.isEmpty
+        ? "@неизвестный_пользователь"
+        : profile.loginName
+        profileDescription.text = (profile.bio?.isEmpty ?? true)
+        ? "Профиль не заполнен"
+        : profile.bio
+    }
     private func createUI() {
         createAvatarImageView()
         createProfileName()
