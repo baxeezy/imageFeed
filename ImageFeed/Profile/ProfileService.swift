@@ -20,7 +20,11 @@ struct ProfileResult: Codable {
     }
 }
 final class ProfileService {
+    static let shared = ProfileService()
+    private(set) var profile: Profile?
     private var task: URLSessionTask?
+
+    private init() {}
 
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         task?.cancel()
@@ -46,6 +50,7 @@ final class ProfileService {
                         loginName: "@\(profileResult.username)",
                         bio: profileResult.bio
                     )
+                    self?.profile = profile
                     completion(.success(profile))
                 } catch {
                     completion(.failure(error))
