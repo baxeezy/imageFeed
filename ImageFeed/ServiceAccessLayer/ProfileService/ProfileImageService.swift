@@ -26,6 +26,7 @@ final class ProfileImageService {
 
     private(set) var avatarURL: String?
     private var task: URLSessionTask?
+    static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
     
     func fetchProfileImageURL(username: String, completion: @escaping (Result<String, Error>) -> Void) {
         task?.cancel()
@@ -47,9 +48,15 @@ final class ProfileImageService {
                 
                 do {
                     let userResult = try JSONDecoder().decode(UserResult.self, from: data)
+                    let profileImageURL = userResult.profileImage.small
                     
-                    self.avatarURL = userResult.profileImage.small
-                    completion(.success(userResult.profileImage.small))
+                    self.avatarURL = profileImageURL
+                    
+                    completion(.success(profileImageURL))
+                    NotificationCenter.default.post(
+                            name: ProfileImageService.didChangeNotification,
+                            object: self,
+                            userInfo: ["URL": profileImageURL])
                 } catch {
                     completion(.failure(error))
                 }
