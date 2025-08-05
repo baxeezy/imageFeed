@@ -19,6 +19,7 @@ struct ProfileResult: Codable {
         case lastName = "last_name"
     }
 }
+
 final class ProfileService {
     static let shared = ProfileService()
     private(set) var profile: Profile?
@@ -30,7 +31,7 @@ final class ProfileService {
         task?.cancel()
         
         guard let token = OAuth2TokenStorage.shared.token else {
-            print("🛑 Ошибка получения токена")
+            completion(.failure(NSError(domain: "ProfileService", code: 401, userInfo: [NSLocalizedDescriptionKey: "Authorization token missing"])))
             return
         }
         guard let request = makeProfileRequest(token: token) else {
@@ -65,7 +66,7 @@ final class ProfileService {
         task.resume()
     }
     
-    func makeProfileRequest(token: String) -> URLRequest? {
+    private func makeProfileRequest(token: String) -> URLRequest? {
         guard let url = URL(string: "https://api.unsplash.com/me") else { return nil }
     
         var request = URLRequest(url: url)
