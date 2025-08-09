@@ -37,6 +37,7 @@ final class ProfileImageService {
         }
         
         guard let request = makeProfileImageRequest(username: username, token: token) else {
+            print("[ProfileImageService]: Неверный URL запроса для токена: \(token)")
             completion(.failure(URLError(.badURL)))
             return
         }

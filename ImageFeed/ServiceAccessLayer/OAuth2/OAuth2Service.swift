@@ -22,6 +22,7 @@ final class OAuth2Service {
         assert(Thread.isMainThread)
         if task != nil {
             guard lastCode != code else {
+                print("[fetchOAuthToken]: Повторный запрос токена с тем же кодом авторизации")
                 completion(.failure(.invalidRequest))
                 return
             }
@@ -29,6 +30,7 @@ final class OAuth2Service {
         
             lastCode = code
             guard let request = makeOAuthTokenRequest(code: code) else {
+                print("[fetchOAuthToken]: Не удалось создать запрос для токена: \(code)")
                 completion(.failure(.invalidRequest))
                 return
             }
@@ -41,6 +43,7 @@ final class OAuth2Service {
                         completion(.success(tokenResponse.accessToken))
                     
                 case .failure(let error):
+                    print("[fetchOAuthToken]: Ошибка запроса: \(error.localizedDescription)")
                     completion(.failure(error as? NetworkError ?? .urlSessionError))
                 }
                 self?.lastCode = nil

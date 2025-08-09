@@ -35,6 +35,7 @@ final class ProfileService {
             return
         }
         guard let request = makeProfileRequest(token: token) else {
+            print("[fetchProfile]: Неверный URL запроса для токена: \(token)")
             completion(.failure(URLError(.badURL)))
             return
         }
@@ -52,6 +53,7 @@ final class ProfileService {
                     completion(.success(profile))
                 
             case .failure(let error):
+                print("[fetchProfile]: Ошибка декодирования: \(error.localizedDescription)")
                 completion(.failure(error))
             }
             self?.task = nil
