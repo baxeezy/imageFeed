@@ -41,24 +41,20 @@ final class ProfileImageService {
             return
         }
         
-        let task = URLSession.shared.data(for: request) { [weak self] result in
+        let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
             switch result {
-            case .success(let data):
+            case .success(let userResult):
                 guard let self else { return }
-                
-                do {
-                    let userResult = try JSONDecoder().decode(UserResult.self, from: data)
                     let profileImageURL = userResult.profileImage.small
                     
+                DispatchQueue.main.async {
                     self.avatarURL = profileImageURL
-                    
                     completion(.success(profileImageURL))
+                    
                     NotificationCenter.default.post(
-                            name: ProfileImageService.didChangeNotification,
-                            object: self,
-                            userInfo: ["URL": profileImageURL])
-                } catch {
-                    completion(.failure(error))
+                        name: ProfileImageService.didChangeNotification,
+                        object: self,
+                        userInfo: ["URL": profileImageURL])
                 }
                 
             case .failure(let error):

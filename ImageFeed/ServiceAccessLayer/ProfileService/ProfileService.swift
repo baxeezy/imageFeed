@@ -39,12 +39,9 @@ final class ProfileService {
             return
         }
         
-        let task = URLSession.shared.data(for: request) { [weak self] result in
+        let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             switch result {
-            case .success(let data):
-                do {
-                    let profileResult = try JSONDecoder().decode(ProfileResult.self, from: data)
-                    
+            case .success(let profileResult):
                     let profile = Profile(
                         username: profileResult.username,
                         name: "\(profileResult.firstName) \(profileResult.lastName)",
@@ -53,9 +50,7 @@ final class ProfileService {
                     )
                     self?.profile = profile
                     completion(.success(profile))
-                } catch {
-                    completion(.failure(error))
-                }
+                
             case .failure(let error):
                 completion(.failure(error))
             }
