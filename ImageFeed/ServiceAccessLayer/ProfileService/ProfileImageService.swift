@@ -48,15 +48,14 @@ final class ProfileImageService {
                 guard let self else { return }
                     let profileImageURL = userResult.profileImage.small
                     
-                DispatchQueue.main.async {
                     self.avatarURL = profileImageURL
+                NotificationCenter.default.post(
+                    name: ProfileImageService.didChangeNotification,
+                    object: self,
+                    userInfo: ["URL": profileImageURL])
                     completion(.success(profileImageURL))
-                    
-                    NotificationCenter.default.post(
-                        name: ProfileImageService.didChangeNotification,
-                        object: self,
-                        userInfo: ["URL": profileImageURL])
-                }
+                
+                
                 
             case .failure(let error):
                 print("[fetchProfileImageURL]: Ошибка запроса: \(error.localizedDescription)")
