@@ -22,18 +22,13 @@ struct ProfileResult: Codable {
 
 final class ProfileService {
     static let shared = ProfileService()
+    private init() {}
     private(set) var profile: Profile?
     private var task: URLSessionTask?
-
-    private init() {}
 
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         task?.cancel()
         
-        guard let token = OAuth2TokenStorage.shared.token else {
-            completion(.failure(NSError(domain: "ProfileService", code: 401, userInfo: [NSLocalizedDescriptionKey: "Authorization token missing"])))
-            return
-        }
         guard let request = makeProfileRequest(token: token) else {
             print("[fetchProfile]: Неверный URL запроса для токена: \(token)")
             completion(.failure(URLError(.badURL)))
@@ -45,7 +40,8 @@ final class ProfileService {
             case .success(let profileResult):
                     let profile = Profile(
                         username: profileResult.username,
-                        name: "\(profileResult.firstName) \(profileResult.lastName)",
+                        name: "\(profileResult.firstName) \(profileResult.lastName)"
+                            .trimmingCharacters(in: .whitespaces),
                         loginName: "@\(profileResult.username)",
                         bio: profileResult.bio
                     )

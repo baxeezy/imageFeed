@@ -1,8 +1,10 @@
 import UIKit
 import Kingfisher
 
+// MARK: - ProfileViewController
 final class ProfileViewController: UIViewController {
     
+    // MARK: - Private Properties
     private var avatarImageView: UIImageView!
     private var profileName: UILabel!
     private var profileNickname: UILabel!
@@ -13,6 +15,7 @@ final class ProfileViewController: UIViewController {
     
     private var profileImageServiceObserver: NSObjectProtocol?
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         createUI()
@@ -28,24 +31,29 @@ final class ProfileViewController: UIViewController {
                 object: nil,
                 queue: .main
             ) { [weak self] _ in
+                print("Получено уведомление об изменении аватарки")
                 guard let self = self else { return }
                 self.updateAvatar()
             }
         updateAvatar()
     }
     
+    // MARK: - Private Methods
 @objc private func didTapButton() {
-    
 }
     
     private func updateAvatar() {
-        guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let imageUrl = URL(string: profileImageURL)
-        else { return }
-        
+        guard let profileImageURL = ProfileImageService.shared.avatarURL else {
+            print("[updateAvatar]: avatarURL равен nil")
+            return
+        }
+        guard let imageUrl = URL(string: profileImageURL) else {
+            print("[updateAvatar]: неверный URL аватарки - \(profileImageURL)")
+            return
+        }
+
         print("imageUrl: \(imageUrl)")
-        
+    
         let placeholderImage = UIImage(systemName: "person.circle.fill")?
             .withTintColor(.lightGray, renderingMode: .alwaysOriginal)
             .withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large))
@@ -76,7 +84,7 @@ final class ProfileViewController: UIViewController {
     private func updateProfileDetails(profile: Profile) {
         profileName.text = profile.name.isEmpty
         ? "Имя не указано"
-        : profile.username
+        : profile.name
         profileNickname.text = profile.loginName.isEmpty
         ? "@неизвестный_пользователь"
         : profile.loginName
@@ -85,6 +93,7 @@ final class ProfileViewController: UIViewController {
         : profile.bio
     }
     private func createUI() {
+        view.backgroundColor = UIColor(named: "YP Black")
         createAvatarImageView()
         createProfileName()
         createProfileNickname()
@@ -102,10 +111,11 @@ final class ProfileViewController: UIViewController {
     
     private func createAvatarImageView() {
         let profileImage = UIImage(named: "userpick")
-        let avatarImageView = UIImageView(image: profileImage)
-        view.addSubview(avatarImageView)
+        avatarImageView = UIImageView(image: profileImage)
+        avatarImageView.contentMode = .scaleAspectFit
+        avatarImageView.clipsToBounds = true
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
-        self.avatarImageView = avatarImageView
+        view.addSubview(avatarImageView)
     }
     
     private func setupAvatarImageView() {
