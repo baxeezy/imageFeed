@@ -1,4 +1,5 @@
 import UIKit
+import ProgressHUD
 
 // MARK: - AuthViewController
 final class AuthViewController: UIViewController {
@@ -23,21 +24,6 @@ final class AuthViewController: UIViewController {
     @IBAction private func didTapLogoButton() {
     }
     
-    // MARK: - Override Methods
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == showWebViewSegueIdentifier {
-            guard
-                let webViewViewController = segue.destination as? WebViewViewController
-            else{
-                assertionFailure("Failed to prepare for \(showWebViewSegueIdentifier)")
-                return
-            }
-            webViewViewController.delegate = self
-        } else {
-            super.prepare(for: segue, sender: sender)
-        }
-    }
-    
     // MARK: - Private Methods
    private func configureBackButton() {
         navigationController?.navigationBar.backIndicatorImage = UIImage(named: "nav_back_button")
@@ -51,7 +37,9 @@ final class AuthViewController: UIViewController {
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
         vc.dismiss(animated: true)
+        UIBlockingProgressHUD.show()
         OAuth2Service.shared.fetchOAuthToken(code: code) { result in
+            UIBlockingProgressHUD.dismiss()
             DispatchQueue.main.async {
                 switch result {
                 case .success(let token):
@@ -74,3 +62,15 @@ protocol AuthViewControllerDelegate: AnyObject {
     func didAuthenticate(_ vc: AuthViewController)
 }
 
+extension AuthViewController  {
+    func showAuthErrorAlert() {
+        let alertController = UIAlertController(
+            title: "Что-то пошло не так",
+            message: "Не удалось войти в систему",
+            preferredStyle: .alert
+        )
+        let okAction = UIAlertAction(title: "Ок", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
+}

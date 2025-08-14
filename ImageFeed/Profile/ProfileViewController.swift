@@ -1,23 +1,99 @@
 import UIKit
+import Kingfisher
 
+// MARK: - ProfileViewController
 final class ProfileViewController: UIViewController {
     
+    // MARK: - Private Properties
     private var avatarImageView: UIImageView!
     private var profileName: UILabel!
     private var profileNickname: UILabel!
     private var profileDescription: UILabel!
     private var logoutButton: UIButton!
     
+    private let profileService = ProfileService.shared
+    
+    private var profileImageServiceObserver: NSObjectProtocol?
+    
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         createUI()
         setupConstraints()
+        
+        if let profile = profileService.profile {
+            updateProfileDetails(profile: profile)
+        }
+        
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(
+                forName: ProfileImageService.didChangeNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                print("Получено уведомление об изменении аватарки")
+                guard let self = self else { return }
+                self.updateAvatar()
+            }
+        updateAvatar()
     }
     
+    // MARK: - Private Methods
 @objc private func didTapButton() {
+}
+    
+    private func updateAvatar() {
+        guard let profileImageURL = ProfileImageService.shared.avatarURL else {
+            print("[updateAvatar]: avatarURL равен nil")
+            return
+        }
+        guard let imageUrl = URL(string: profileImageURL) else {
+            print("[updateAvatar]: неверный URL аватарки - \(profileImageURL)")
+            return
+        }
+
+        print("imageUrl: \(imageUrl)")
+    
+        let placeholderImage = UIImage(systemName: "person.circle.fill")?
+            .withTintColor(.lightGray, renderingMode: .alwaysOriginal)
+            .withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large))
+        
+        let processor = RoundCornerImageProcessor(cornerRadius: 35)
+        avatarImageView.kf.indicatorType = .activity
+        avatarImageView.kf.setImage(
+            with: imageUrl,
+            placeholder: placeholderImage,
+            options: [
+                .processor(processor),
+                .scaleFactor(UIScreen.main.scale),
+                .cacheOriginalImage,
+                .forceRefresh
+            ]) { result in
+                switch result {
+                case .success(let value):
+                    print(value.image)
+                    print(value.cacheType)
+                    print(value.source)
+                    
+                case .failure(let error):
+                    print(error)
+                }
+            }
     }
     
+    private func updateProfileDetails(profile: Profile) {
+        profileName.text = profile.name.isEmpty
+        ? "Имя не указано"
+        : profile.name
+        profileNickname.text = profile.loginName.isEmpty
+        ? "@неизвестный_пользователь"
+        : profile.loginName
+        profileDescription.text = (profile.bio?.isEmpty ?? true)
+        ? "Профиль не заполнен"
+        : profile.bio
+    }
     private func createUI() {
+        view.backgroundColor = UIColor(named: "YP Black")
         createAvatarImageView()
         createProfileName()
         createProfileNickname()
@@ -35,10 +111,11 @@ final class ProfileViewController: UIViewController {
     
     private func createAvatarImageView() {
         let profileImage = UIImage(named: "userpick")
-        let avatarImageView = UIImageView(image: profileImage)
-        view.addSubview(avatarImageView)
+        avatarImageView = UIImageView(image: profileImage)
+        avatarImageView.contentMode = .scaleAspectFit
+        avatarImageView.clipsToBounds = true
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
-        self.avatarImageView = avatarImageView
+        view.addSubview(avatarImageView)
     }
     
     private func setupAvatarImageView() {
