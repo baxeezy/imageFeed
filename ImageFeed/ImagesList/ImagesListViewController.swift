@@ -55,6 +55,13 @@ extension ImagesListViewController: UITableViewDataSource {
         
         return imageListCell
     }
+    
+    func tableView(_ tableVIew: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard indexPath.row + 1 == ImagesListService.shared.photos.count else {
+            return
+        }
+        ImagesListService.shared.fetchPhotosNextPage { result in }
+    }
 }
 
 extension ImagesListViewController {
