@@ -58,18 +58,18 @@ final class ImagesListService {
         print("[fetchPhotosNextPage]: Запрос для ленты фотографий")
         
         guard let token = OAuth2TokenStorage.shared.token else {
-            completion(.failure(NSError(domain: "ProfileImageService", code: 401, userInfo: [NSLocalizedDescriptionKey: "[fetchPhotosNextPage]: Токен авторизации не найден"])))
+            completion(.failure(NSError(domain: "ProfileImageService", code: 401, userInfo: [NSLocalizedDescriptionKey: "❌ [fetchPhotosNextPage]: Токен авторизации не найден"])))
             return
         }
         print("[fetchPhotosNextPage]: \(token)")
         
         guard let request = makeImagesListRequest(page: nextPage, perPage: perPage, token: token) else {
-            print("[fetchPhotosNextPage]: Неверный URL запроса для токена: \(token)")
+            print("❌ [fetchPhotosNextPage]: Неверный URL запроса для токена: \(token)")
             completion(.failure(URLError(.badURL)))
             return
         }
         
-        print("[fetchPhotosNextPage]: Отправка запроса к URL: \(request.url?.absoluteString ?? "nil")")
+        print("[fetchPhotosNextPage]: Отправка запроса к URL: \(request.url?.absoluteString ?? "nil ❌")")
         
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
             guard let self = self else { return }
@@ -86,7 +86,7 @@ final class ImagesListService {
                         isLiked: photoResult.likedByUser
                     )
                 }
-                
+                print("❤️")
                 DispatchQueue.main.async {
                     self.lastLoadedPage = nextPage
                     self.photos.append(contentsOf: newPhotos)
@@ -98,7 +98,7 @@ final class ImagesListService {
                 }
                 
             case .failure(let error):
-                print("[fetchPhotosNextPage]: Ошибка запроса: \(error.localizedDescription)")
+                print("❌ [fetchPhotosNextPage]: Ошибка запроса: \(error.localizedDescription)")
                 completion(.failure(error))
             }
         }

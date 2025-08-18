@@ -4,6 +4,13 @@ import UIKit
 final class SingleImageViewController: UIViewController {
     
     // MARK: - Public Properties
+    var imageURL: URL? {
+        didSet {
+            guard isViewLoaded, let imageURL else { return }
+            loadImage(from: imageURL)
+        }
+    }
+    
     var image: UIImage? {
         didSet {
             guard isViewLoaded, let image else { return }
@@ -59,6 +66,27 @@ final class SingleImageViewController: UIViewController {
         let x = (newContentSize.width - visibleRectSize.width) / 2
         let y = (newContentSize.height - visibleRectSize.height) / 2
         scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
+    }
+    
+    private func loadImage(from url: URL) {
+        print("[loadImage]: Попали в загрузку изображения для зума картинки")
+        UIBlockingProgressHUD.show()
+        imageView.kf.setImage(with: url) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            print("[loadImage]: Загрузка изображения завершена")
+            guard let self = self else {
+                print("❌ [loadImage]: Ошибка: self == nil")
+                return
+            }
+            
+            switch result {
+            case .success(let imageResult):
+                self.image = imageResult.image
+                print("[loadImage]: Загрузка изображения успешна")
+            case .failure(let error):
+                print("❌ [loadImage]: Ошибка загрузки изображения: \(error)")
+            }
+        }
     }
 }
 
