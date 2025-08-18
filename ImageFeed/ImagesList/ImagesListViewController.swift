@@ -102,18 +102,16 @@ extension ImagesListViewController {
             options: [
                 .scaleFactor(UIScreen.main.scale),
                 .cacheOriginalImage,
-//                .forceRefresh
+                .forceRefresh
             ]) { result in
                 switch result {
                 case .success(let value):
-//                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
                     print(value.image)
                     print(value.cacheType)
                     print(value.source)
                     
                 case .failure(let error):
                     print("[configCell]: Ошибка загрузки изображения: \(error)")
-                    print(error)
                 }
             }
 
@@ -146,18 +144,22 @@ extension ImagesListViewController: UITableViewDelegate {
 
 extension ImagesListViewController {
     func updateTableViewAnimated() {
+        let newPhotos = ImagesListService.shared.photos
+        
+        // Проверяем, что новые фото действительно новые и не дублируют существующие
+        let newUniquePhotos = newPhotos.filter { newPhoto in
+            !photos.contains { $0.id == newPhoto.id }
+        }
+        
+        guard !newUniquePhotos.isEmpty else { return }
+        
         let oldCount = photos.count
-        let newCount = ImagesListService.shared.photos.count
-        photos = ImagesListService.shared.photos
-        if oldCount != newCount {
-            tableView.performBatchUpdates {
-                let indexPath = (oldCount ..< newCount).map { i in
-                    IndexPath(row: i, section: 0)
-                }
-                
-                tableView.insertRows(at: indexPath, with: .automatic)
-            } completion: { _ in
-            }
+        photos.append(contentsOf: newUniquePhotos)
+        let newCount = photos.count
+        
+        tableView.performBatchUpdates {
+            let indexPath = (oldCount ..< newCount).map { IndexPath(row: $0, section: 0) }
+            tableView.insertRows(at: indexPath, with: .automatic)
         }
     }
 }

@@ -102,7 +102,7 @@ final class ImagesListService {
                 completion(.failure(error))
             }
         }
-        self.task = nil
+        self.task = task
         task.resume()
     }
     
