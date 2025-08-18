@@ -30,14 +30,18 @@ struct PhotoResult: Codable {
     }
 }
 
-    struct UrlsResult: Codable {
-        let raw: String
-        let full: String
-        let regular: String
-        let small: String
-        let thumb: String
-    }
-    
+struct UrlsResult: Codable {
+    let raw: String
+    let full: String
+    let regular: String
+    let small: String
+    let thumb: String
+}
+  
+struct LikeResult: Codable {
+    let photo: PhotoResult
+}
+
 final class ImagesListService {
     static let shared = ImagesListService()
     private init() {}
@@ -121,5 +125,83 @@ final class ImagesListService {
         request.httpMethod = "GET"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
+    }
+    
+    private func changeLike(photoId: String, isLike: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
+        task?.cancel()
+        
+        guard let token = OAuth2TokenStorage.shared.token else {
+            completion(.failure(NSError(domain: "ProfileImageService", code: 401, userInfo: [NSLocalizedDescriptionKey: "❌ [changeLike]: Токен авторизации не найден"])))
+            return
+        }
+        print("[changeLike]: \(token)")
+        
+        let request: URLRequest?
+        if isLike {
+            request = makeLikeRequest(photoId: photoId, token: token)
+        } else {
+            request = makeUnLikeRequest(photoId: photoId, token: token)
+        }
+        
+        guard let request = request else {
+            completion(.failure(URLError(.badURL)))
+            return
+        }
+        
+        let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<LikeResult, Error>) in
+            guard let self = self else { return }
+            switch result {
+            case .success:
+                if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
+                    let photo = self.photos[index]
+                    let newPhoto = Photo(
+                        id: photoId,
+                        size: photo.size,
+                        createdAt: photo.createdAt,
+                        welcomeDescription: photo.welcomeDescription,
+                        thumbImageURL: photo.thumbImageURL,
+                        largeImageURL: photo.largeImageURL,
+                        isLiked: !photo.isLiked
+                    )
+                    self.photos = self.photos.withReplaced(itemAt: index, newValue: newPhoto)
+                }
+                completion(.success(()))
+                
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+        self.task = task
+        task.resume()
+    }
+    
+    private func makeLikeRequest(photoId: String, token: String) -> URLRequest? {
+        guard let url = URL(string: "https://api.unsplash.com/photos/\(photoId)/like") else {
+            return nil
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        return request
+    }
+    
+    private func makeUnLikeRequest(photoId: String, token: String) -> URLRequest? {
+        guard let url = URL(string: "https://api.unsplash.com/photos/\(photoId)/like") else {
+            return nil
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        return request
+    }
+}
+
+extension Array {
+    func withReplaced(itemAt index: Int, newValue: Element) -> Array {
+        var newArray = self
+        newArray[index] = newValue
+        return newArray
     }
 }
