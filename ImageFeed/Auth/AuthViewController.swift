@@ -59,6 +59,7 @@ extension AuthViewController: WebViewViewControllerDelegate {
                     self.delegate?.didAuthenticate(self)
                     print("✅ Токен получен: \(token)")
                 case .failure(let error):
+                    self.showAuthErrorAlert()
                     print("🛑 Ошибка получения токена: \(error)")
                 }
             }

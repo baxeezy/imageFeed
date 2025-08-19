@@ -127,14 +127,13 @@ final class ImagesListService {
         return request
     }
     
-    private func changeLike(photoId: String, isLike: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
+    func changeLike(photoId: String, isLike: Bool, completion: @escaping (Result<Photo, Error>) -> Void) {
         task?.cancel()
         
         guard let token = OAuth2TokenStorage.shared.token else {
             completion(.failure(NSError(domain: "ProfileImageService", code: 401, userInfo: [NSLocalizedDescriptionKey: "❌ [changeLike]: Токен авторизации не найден"])))
             return
         }
-        print("[changeLike]: \(token)")
         
         let request: URLRequest?
         if isLike {
@@ -148,24 +147,19 @@ final class ImagesListService {
             return
         }
         
-        let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<LikeResult, Error>) in
-            guard let self = self else { return }
+        let task = URLSession.shared.objectTask(for: request) { (result: Result<LikeResult, Error>) in
             switch result {
-            case .success:
-                if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
-                    let photo = self.photos[index]
-                    let newPhoto = Photo(
-                        id: photoId,
-                        size: photo.size,
-                        createdAt: photo.createdAt,
-                        welcomeDescription: photo.welcomeDescription,
-                        thumbImageURL: photo.thumbImageURL,
-                        largeImageURL: photo.largeImageURL,
-                        isLiked: !photo.isLiked
-                    )
-                    self.photos = self.photos.withReplaced(itemAt: index, newValue: newPhoto)
-                }
-                completion(.success(()))
+            case .success(let likeResult):
+                let updatedPhoto = Photo(
+                    id: likeResult.photo.id,
+                    size: CGSize(width: likeResult.photo.width, height: likeResult.photo.height),
+                    createdAt: self.dateFormatter.date(from: likeResult.photo.createdAt),
+                    welcomeDescription: likeResult.photo.description,
+                    thumbImageURL: likeResult.photo.urls.thumb,
+                    largeImageURL: likeResult.photo.urls.full,
+                    isLiked: likeResult.photo.likedByUser
+                )
+                completion(.success(updatedPhoto))
                 
             case .failure(let error):
                 completion(.failure(error))

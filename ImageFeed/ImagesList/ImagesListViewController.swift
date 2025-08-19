@@ -16,14 +16,15 @@ final class ImagesListViewController: UIViewController {
     
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
     private var imagesListServiceObserver: NSObjectProtocol?
+    private let imagesService = ImagesListService.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-            // Загрузка фотографий
-        ImagesListService.shared.fetchPhotosNextPage { [weak self] _ in
+        // Загрузка фотографий
+        imagesService.fetchPhotosNextPage { [weak self] _ in
             self?.updateTableViewAnimated()
-            }
+        }
         
         imagesListServiceObserver = NotificationCenter.default
             .addObserver(
@@ -81,7 +82,7 @@ extension ImagesListViewController: UITableViewDataSource {
             print("❌ [tableView: willDisplay]: Количество фото не равно количеству ячеек: \(indexPath.row)/\(photos.count - 1)")
             return
         }
-        ImagesListService.shared.fetchPhotosNextPage { [weak self] _ in
+        imagesService.fetchPhotosNextPage { [weak self] _ in
             self?.updateTableViewAnimated()
         }
     }
@@ -92,6 +93,8 @@ extension ImagesListViewController {
         
         let photo = photos[indexPath.row]
         let placeholderImage = UIImage(named: "placeholder_stub")
+        
+        cell.delegate = self
         
         cell.cellImage.kf.indicatorType = .activity
         (cell.cellImage.kf.indicator?.view as? UIActivityIndicatorView)?.color = .white
@@ -117,9 +120,7 @@ extension ImagesListViewController {
 
         cell.dateLabel.text = dateFormatter.string(from: photo.createdAt ?? Date())
 
-        let isLiked = indexPath.row % 2 == 0
-        let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
-        cell.likeButton.setImage(likeImage, for: .normal)
+        cell.setIsLiked(photo.isLiked)
     }
 }
 
@@ -144,7 +145,7 @@ extension ImagesListViewController: UITableViewDelegate {
 
 extension ImagesListViewController {
     func updateTableViewAnimated() {
-        let newPhotos = ImagesListService.shared.photos
+        let newPhotos = imagesService.photos
         
         // Проверяем, что новые фото действительно новые и не дублируют существующие
         let newUniquePhotos = newPhotos.filter { newPhoto in
@@ -163,3 +164,49 @@ extension ImagesListViewController {
         }
     }
 }
+
+extension ImagesListViewController: ImagesListCellDelegate {
+    func imagesListCellDidTapLike(_ cell: ImagesListCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        let photo = photos[indexPath.row]
+        
+        UIBlockingProgressHUD.show()
+        imagesService.changeLike(
+            photoId: photo.id,
+            isLike: !photo.isLiked
+        ) { [weak self] result in
+            guard let self = self else { return }
+            
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let updatedPhoto):
+                    // Обновляем только конкретный элемент
+                    self.photos[indexPath.row] = updatedPhoto
+                    cell.setIsLiked(updatedPhoto.isLiked)
+                    UIBlockingProgressHUD.dismiss()
+                    
+                case .failure(let error):
+                    UIBlockingProgressHUD.dismiss()
+                    print("Ошибка изменения лайка: \(error.localizedDescription)")
+                    self.showLikeErrorAlert()
+                    
+                    // Возвращаем в исходное состояние при ошибке
+                    cell.setIsLiked(photo.isLiked)
+                }
+            }
+        }
+    }
+    
+    func showLikeErrorAlert() {
+        let alertController = UIAlertController(
+            title: "Что-то пошло не так",
+            message: "Не удалось поставить лайк",
+            preferredStyle: .alert
+        )
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
+}
+
+                
