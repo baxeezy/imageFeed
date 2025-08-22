@@ -30,10 +30,8 @@ final class SingleImageViewController: UIViewController {
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
         
-        guard let image else { return }
-        imageView.image = image
-        imageView.frame.size = image.size
-        rescaleAndCenterImageInScrollView(image: image)
+        guard let imageURL else { return }
+        loadImage(from: imageURL)
     }
     
     // MARK: - IBActions
@@ -82,11 +80,29 @@ final class SingleImageViewController: UIViewController {
             switch result {
             case .success(let imageResult):
                 self.image = imageResult.image
+                self.rescaleAndCenterImageInScrollView(image: imageResult.image)
                 print("[loadImage]: Загрузка изображения успешна")
             case .failure(let error):
                 print("❌ [loadImage]: Ошибка загрузки изображения: \(error)")
+                self.showError()
             }
         }
+    }
+    
+    private func showError() {
+        let alertController = UIAlertController(
+            title: "Что-то пошло не так. Попробовать еще раз?",
+            message: "Не удалось загрузить изображение",
+            preferredStyle: .alert
+        )
+        let hideAction = UIAlertAction(title: "Не надо", style: .default, handler: nil)
+        let tryAgainAction = UIAlertAction(title: "Повторить", style: .default) { [weak self] _ in
+            guard let self = self, let imageURL = self.imageURL else { return }
+            self.loadImage(from: imageURL)
+        }
+        alertController.addAction(hideAction)
+        alertController.addAction(tryAgainAction)
+        present(alertController, animated: true)
     }
 }
 

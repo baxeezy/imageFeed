@@ -49,7 +49,7 @@ final class ImagesListViewController: UIViewController {
             }
             
             let photo = photos[indexPath.row]
-            if let url = URL(string: photo.thumbImageURL) {
+            if let url = URL(string: photo.largeImageURL) {
                         viewController.imageURL = url
                     }
         } else {
