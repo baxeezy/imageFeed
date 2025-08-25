@@ -38,25 +38,12 @@ final class ImagesListViewController: UIViewController {
             }
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == showSingleImageSegueIdentifier {
-            guard
-                let viewController = segue.destination as? SingleImageViewController,
-                let indexPath = sender as? IndexPath
-            else {
-                assertionFailure("❌ [ImagesListViewController]: Неверное наследование секвея")
-                return
-            }
-            
-            let photo = photos[indexPath.row]
-            if let url = URL(string: photo.largeImageURL) {
-                        viewController.imageURL = url
-                    }
-        } else {
-            print("❌ [ImagesListViewController]: Неподдерживающий секвей переход")
-            super.prepare(for: segue, sender: sender)
+    private func showSingleImage(for photo: Photo) {
+            let singleImageVC = SingleImageViewController()
+            singleImageVC.imageURL = URL(string: photo.largeImageURL)
+            singleImageVC.modalPresentationStyle = .fullScreen
+            present(singleImageVC, animated: true)
         }
-    }
 }
 
 extension ImagesListViewController: UITableViewDataSource {
@@ -126,7 +113,8 @@ extension ImagesListViewController {
 
 extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: showSingleImageSegueIdentifier, sender: indexPath)
+        let photo = photos[indexPath.row]
+        showSingleImage(for: photo)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat{
