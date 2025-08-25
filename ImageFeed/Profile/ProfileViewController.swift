@@ -39,8 +39,9 @@ final class ProfileViewController: UIViewController {
     }
     
     // MARK: - Private Methods
-@objc private func didTapButton() {
-}
+    @objc private func didTapButton() {
+        ProfileLogoutService.shared.logout()
+    }
     
     private func updateAvatar() {
         guard let profileImageURL = ProfileImageService.shared.avatarURL else {

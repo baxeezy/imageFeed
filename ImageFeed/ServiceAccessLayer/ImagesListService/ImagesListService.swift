@@ -190,6 +190,12 @@ final class ImagesListService {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
+    
+    func cleanPhotos() {
+        task?.cancel()
+        photos = []
+        lastLoadedPage = nil
+    }
 }
 
 extension Array {
