@@ -20,8 +20,6 @@ final class ImagesListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Загрузка фотографий
         imagesService.fetchPhotosNextPage { [weak self] _ in
             self?.updateTableViewAnimated()
         }
@@ -58,9 +56,7 @@ extension ImagesListViewController: UITableViewDataSource {
             print("❌ [tableView: cellForRowAt]: Удаленная из очереди ячейка не является экземпляром ImagesListCell")
             return UITableViewCell()
         }
-        
         configCell(for: imageListCell, with: indexPath)
-        
         return imageListCell
     }
     
@@ -77,7 +73,6 @@ extension ImagesListViewController: UITableViewDataSource {
 
 extension ImagesListViewController {
     private func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-        
         let photo = photos[indexPath.row]
         let placeholderImage = UIImage(named: "placeholder_stub")
         
@@ -104,9 +99,7 @@ extension ImagesListViewController {
                     print("[configCell]: Ошибка загрузки изображения: \(error)")
                 }
             }
-
         cell.dateLabel.text = dateFormatter.string(from: photo.createdAt ?? Date())
-
         cell.setIsLiked(photo.isLiked)
     }
 }
@@ -119,27 +112,23 @@ extension ImagesListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat{
         let photo = photos[indexPath.row]
-                let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
-                let imageViewWidth = tableView.bounds.width - imageInsets.left - imageInsets.right
-                
-                // Используем размеры фото из модели
-                let imageSize = photo.size
-                let scale = imageViewWidth / imageSize.width
-                let cellHeight = imageSize.height * scale + imageInsets.top + imageInsets.bottom
-                
-                return cellHeight
+        let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
+        let imageViewWidth = tableView.bounds.width - imageInsets.left - imageInsets.right
+        
+        let imageSize = photo.size
+        let scale = imageViewWidth / imageSize.width
+        let cellHeight = imageSize.height * scale + imageInsets.top + imageInsets.bottom
+        
+        return cellHeight
     }
 }
 
 extension ImagesListViewController {
     func updateTableViewAnimated() {
         let newPhotos = imagesService.photos
-        
-        // Проверяем, что новые фото действительно новые и не дублируют существующие
         let newUniquePhotos = newPhotos.filter { newPhoto in
             !photos.contains { $0.id == newPhoto.id }
         }
-        
         guard !newUniquePhotos.isEmpty else { return }
         
         let oldCount = photos.count
@@ -168,7 +157,6 @@ extension ImagesListViewController: ImagesListCellDelegate {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let updatedPhoto):
-                    // Обновляем только конкретный элемент
                     self.photos[indexPath.row] = updatedPhoto
                     cell.setIsLiked(updatedPhoto.isLiked)
                     UIBlockingProgressHUD.dismiss()
@@ -177,8 +165,6 @@ extension ImagesListViewController: ImagesListCellDelegate {
                     UIBlockingProgressHUD.dismiss()
                     print("Ошибка изменения лайка: \(error.localizedDescription)")
                     self.showLikeErrorAlert()
-                    
-                    // Возвращаем в исходное состояние при ошибке
                     cell.setIsLiked(photo.isLiked)
                 }
             }

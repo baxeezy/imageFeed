@@ -12,7 +12,7 @@ struct Photo {
 
 struct PhotoResult: Codable {
     let id: String
-    let createdAt: String
+    let createdAt: String?
     let width: Int
     let height: Int
     let description: String?
@@ -83,7 +83,7 @@ final class ImagesListService {
                     Photo(
                         id: photoResult.id,
                         size: CGSize(width: photoResult.width, height: photoResult.height),
-                        createdAt: self.dateFormatter.date(from: photoResult.createdAt),
+                        createdAt: self.dateFormatter.date(from: photoResult.createdAt ?? ""),
                         welcomeDescription: photoResult.description,
                         thumbImageURL: photoResult.urls.thumb,
                         largeImageURL: photoResult.urls.full,
@@ -153,7 +153,7 @@ final class ImagesListService {
                 let updatedPhoto = Photo(
                     id: likeResult.photo.id,
                     size: CGSize(width: likeResult.photo.width, height: likeResult.photo.height),
-                    createdAt: self.dateFormatter.date(from: likeResult.photo.createdAt),
+                    createdAt: self.dateFormatter.date(from: likeResult.photo.createdAt ?? ""),
                     welcomeDescription: likeResult.photo.description,
                     thumbImageURL: likeResult.photo.urls.thumb,
                     largeImageURL: likeResult.photo.urls.full,

@@ -43,7 +43,6 @@ final class ProfileImageService {
             completion(.failure(URLError(.badURL)))
             return
         }
-        
         print("[fetchProfileImageURL]:Отправка запроса: \(request.url?.absoluteString ?? "nil")")
         
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
@@ -66,7 +65,6 @@ final class ProfileImageService {
                 completion(.failure(error))
             }
         }
-        
         self.task = task
         task.resume()
     }
