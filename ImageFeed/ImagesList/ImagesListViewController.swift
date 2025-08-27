@@ -1,10 +1,13 @@
 import UIKit
 import Kingfisher
 
+//MARK: - ImagesListViewController
 final class ImagesListViewController: UIViewController {
     
+    // MARK: - IBOutlets
     @IBOutlet weak private var tableView: UITableView!
 
+    // MARK: - Private Properties
     private var photos: [Photo] = []
     
     private lazy var dateFormatter: DateFormatter = {
@@ -18,6 +21,7 @@ final class ImagesListViewController: UIViewController {
     private var imagesListServiceObserver: NSObjectProtocol?
     private let imagesService = ImagesListService.shared
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         imagesService.fetchPhotosNextPage { [weak self] _ in
@@ -36,6 +40,7 @@ final class ImagesListViewController: UIViewController {
             }
     }
     
+    // MARK: - Private Methods
     private func showSingleImage(for photo: Photo) {
             let singleImageVC = SingleImageViewController()
             singleImageVC.imageURL = URL(string: photo.largeImageURL)
@@ -43,7 +48,7 @@ final class ImagesListViewController: UIViewController {
             present(singleImageVC, animated: true)
         }
 }
-
+// MARK: - UITableViewDataSource
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return photos.count
@@ -71,6 +76,27 @@ extension ImagesListViewController: UITableViewDataSource {
     }
 }
 
+//MARK: - UITableViewDelegate
+extension ImagesListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let photo = photos[indexPath.row]
+        showSingleImage(for: photo)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat{
+        let photo = photos[indexPath.row]
+        let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
+        let imageViewWidth = tableView.bounds.width - imageInsets.left - imageInsets.right
+        
+        let imageSize = photo.size
+        let scale = imageViewWidth / imageSize.width
+        let cellHeight = imageSize.height * scale + imageInsets.top + imageInsets.bottom
+        
+        return cellHeight
+    }
+}
+
+//MARK: - Cell Configuration
 extension ImagesListViewController {
     private func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         let photo = photos[indexPath.row]
@@ -104,25 +130,7 @@ extension ImagesListViewController {
     }
 }
 
-extension ImagesListViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let photo = photos[indexPath.row]
-        showSingleImage(for: photo)
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat{
-        let photo = photos[indexPath.row]
-        let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
-        let imageViewWidth = tableView.bounds.width - imageInsets.left - imageInsets.right
-        
-        let imageSize = photo.size
-        let scale = imageViewWidth / imageSize.width
-        let cellHeight = imageSize.height * scale + imageInsets.top + imageInsets.bottom
-        
-        return cellHeight
-    }
-}
-
+//MARK: - Table View Updates
 extension ImagesListViewController {
     func updateTableViewAnimated() {
         let newPhotos = imagesService.photos
@@ -142,6 +150,7 @@ extension ImagesListViewController {
     }
 }
 
+// MARK: - ImagesListCellDelegate
 extension ImagesListViewController: ImagesListCellDelegate {
     func imagesListCellDidTapLike(_ cell: ImagesListCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }

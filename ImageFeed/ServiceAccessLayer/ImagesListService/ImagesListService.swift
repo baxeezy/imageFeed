@@ -1,59 +1,23 @@
 import UIKit
 
-struct Photo {
-    let id: String
-    let size: CGSize
-    let createdAt: Date?
-    let welcomeDescription: String?
-    let thumbImageURL: String
-    let largeImageURL: String
-    let isLiked: Bool
-}
-
-struct PhotoResult: Codable {
-    let id: String
-    let createdAt: String?
-    let width: Int
-    let height: Int
-    let description: String?
-    let likedByUser: Bool
-    let urls: UrlsResult
-    
-    private enum CodingKeys: String, CodingKey {
-        case id
-        case createdAt = "created_at"
-        case width
-        case height
-        case description
-        case likedByUser = "liked_by_user"
-        case urls
-    }
-}
-
-struct UrlsResult: Codable {
-    let raw: String
-    let full: String
-    let regular: String
-    let small: String
-    let thumb: String
-}
-  
-struct LikeResult: Codable {
-    let photo: PhotoResult
-}
-
+//MARK: - ImagesListService
 final class ImagesListService {
     static let shared = ImagesListService()
     private init() {}
+    
+    // MARK: - Public Properties
     private(set) var photos: [Photo] = []
     
+    // MARK: - Private Properties
     private var lastLoadedPage: Int?
     private var perPage: Int = 10
     private let dateFormatter = ISO8601DateFormatter()
-    
-    static let didChangeNotification = Notification.Name("ImagesListServiceDidChange")
     private var task: URLSessionTask?
     
+    // MARK: - Notifications
+    static let didChangeNotification = Notification.Name("ImagesListServiceDidChange")
+
+    // MARK: - Public Methods
     func fetchPhotosNextPage(completion: @escaping (Result<String, Error>) -> Void) {
         task?.cancel()
         
@@ -110,23 +74,6 @@ final class ImagesListService {
         task.resume()
     }
     
-    private func makeImagesListRequest(page: Int, perPage: Int, token: String) -> URLRequest? {
-        let queryItems = [
-            URLQueryItem(name: "page", value: "\(page)"),
-            URLQueryItem(name: "per_page", value: "\(perPage)")
-        ]
-        
-        var urlComponents = URLComponents(string: "https://api.unsplash.com/photos")
-        urlComponents?.queryItems = queryItems
-        
-        guard let url = urlComponents?.url else { return nil }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        return request
-    }
-    
     func changeLike(photoId: String, isLike: Bool, completion: @escaping (Result<Photo, Error>) -> Void) {
         task?.cancel()
         
@@ -169,6 +116,30 @@ final class ImagesListService {
         task.resume()
     }
     
+    func cleanPhotos() {
+        task?.cancel()
+        photos = []
+        lastLoadedPage = nil
+    }
+    
+    // MARK: - Private Methods
+    private func makeImagesListRequest(page: Int, perPage: Int, token: String) -> URLRequest? {
+        let queryItems = [
+            URLQueryItem(name: "page", value: "\(page)"),
+            URLQueryItem(name: "per_page", value: "\(perPage)")
+        ]
+        
+        var urlComponents = URLComponents(string: "https://api.unsplash.com/photos")
+        urlComponents?.queryItems = queryItems
+        
+        guard let url = urlComponents?.url else { return nil }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        return request
+    }
+    
     private func makeLikeRequest(photoId: String, token: String) -> URLRequest? {
         guard let url = URL(string: "https://api.unsplash.com/photos/\(photoId)/like") else {
             return nil
@@ -190,14 +161,9 @@ final class ImagesListService {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
-    
-    func cleanPhotos() {
-        task?.cancel()
-        photos = []
-        lastLoadedPage = nil
-    }
 }
 
+// MARK: - Array Extension
 extension Array {
     func withReplaced(itemAt index: Int, newValue: Element) -> Array {
         var newArray = self
