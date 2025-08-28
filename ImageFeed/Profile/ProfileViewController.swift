@@ -39,8 +39,9 @@ final class ProfileViewController: UIViewController {
     }
     
     // MARK: - Private Methods
-@objc private func didTapButton() {
-}
+    @objc private func didTapLogoutButton() {
+        showLogoutAlert()
+    }
     
     private func updateAvatar() {
         guard let profileImageURL = ProfileImageService.shared.avatarURL else {
@@ -51,9 +52,9 @@ final class ProfileViewController: UIViewController {
             print("[updateAvatar]: неверный URL аватарки - \(profileImageURL)")
             return
         }
-
+        
         print("imageUrl: \(imageUrl)")
-    
+        
         let placeholderImage = UIImage(systemName: "person.circle.fill")?
             .withTintColor(.lightGray, renderingMode: .alwaysOriginal)
             .withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large))
@@ -121,10 +122,10 @@ final class ProfileViewController: UIViewController {
     private func setupAvatarImageView() {
         NSLayoutConstraint.activate([
             avatarImageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-        avatarImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
-        avatarImageView.heightAnchor.constraint(equalToConstant: 70),
-        avatarImageView.widthAnchor.constraint(equalToConstant: 70)
-            ])
+            avatarImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
+            avatarImageView.heightAnchor.constraint(equalToConstant: 70),
+            avatarImageView.widthAnchor.constraint(equalToConstant: 70)
+        ])
     }
     
     private func createProfileName() {
@@ -140,8 +141,8 @@ final class ProfileViewController: UIViewController {
     
     private func setupProfileName() {
         NSLayoutConstraint.activate([
-        profileName.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 8),
-        profileName.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16)
+            profileName.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 8),
+            profileName.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16)
         ])
     }
     
@@ -158,8 +159,8 @@ final class ProfileViewController: UIViewController {
     
     private func setupProfileNickname() {
         NSLayoutConstraint.activate([
-        profileNickname.topAnchor.constraint(equalTo: profileName.bottomAnchor, constant: 8),
-        profileNickname.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16)
+            profileNickname.topAnchor.constraint(equalTo: profileName.bottomAnchor, constant: 8),
+            profileNickname.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16)
         ])
     }
     
@@ -176,8 +177,8 @@ final class ProfileViewController: UIViewController {
     
     private func setupProfileDescription() {
         NSLayoutConstraint.activate([
-        profileDescription.topAnchor.constraint(equalTo: profileNickname.bottomAnchor, constant: 8),
-        profileDescription.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16)
+            profileDescription.topAnchor.constraint(equalTo: profileNickname.bottomAnchor, constant: 8),
+            profileDescription.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16)
         ])
     }
     
@@ -185,22 +186,38 @@ final class ProfileViewController: UIViewController {
         let logoutButton = UIButton.systemButton(
             with: UIImage(systemName: "ipad.and.arrow.forward")!,
             target: self,
-            action: #selector(Self.didTapButton)
-            )
+            action: #selector(Self.didTapLogoutButton)
+        )
         
-            view.addSubview(logoutButton)
-            logoutButton.translatesAutoresizingMaskIntoConstraints = false
-
+        view.addSubview(logoutButton)
+        logoutButton.translatesAutoresizingMaskIntoConstraints = false
+        
         logoutButton.tintColor = UIColor(named: "YP red")
         self.logoutButton = logoutButton
     }
     
     private func setupLogoutButton() {
         NSLayoutConstraint.activate([
-        logoutButton.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor),
-        logoutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-        logoutButton.heightAnchor.constraint(equalToConstant: 44),
-        logoutButton.widthAnchor.constraint(equalToConstant: 44)
+            logoutButton.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor),
+            logoutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            logoutButton.heightAnchor.constraint(equalToConstant: 44),
+            logoutButton.widthAnchor.constraint(equalToConstant: 44)
         ])
+    }
+    
+    private func showLogoutAlert() {
+        let alertController = UIAlertController(
+            title: "Пока, пока!",
+            message: "Уверены, что хотите выйти?",
+            preferredStyle: .alert
+        )
+        let noAction = UIAlertAction(title: "Нет", style: .cancel) { _ in }
+        let yesAction = UIAlertAction(title: "Да", style: .default) { _ in
+            ProfileLogoutService.shared.logout()
+        }
+
+        alertController.addAction(noAction)
+        alertController.addAction(yesAction)
+        present(alertController, animated: true, completion: nil)
     }
 }

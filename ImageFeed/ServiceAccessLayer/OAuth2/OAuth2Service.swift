@@ -22,7 +22,7 @@ final class OAuth2Service {
         assert(Thread.isMainThread)
         if task != nil {
             guard lastCode != code else {
-                print("[fetchOAuthToken]: Повторный запрос токена с тем же кодом авторизации")
+                print("❌ [fetchOAuthToken]: Повторный запрос токена с тем же кодом авторизации")
                 completion(.failure(.invalidRequest))
                 return
             }
@@ -30,7 +30,7 @@ final class OAuth2Service {
         
             lastCode = code
             guard let request = makeOAuthTokenRequest(code: code) else {
-                print("[fetchOAuthToken]: Не удалось создать запрос для токена: \(code)")
+                print("❌ [fetchOAuthToken]: Не удалось создать запрос для токена: \(code)")
                 completion(.failure(.invalidRequest))
                 return
             }
@@ -43,7 +43,7 @@ final class OAuth2Service {
                         completion(.success(tokenResponse.accessToken))
                     
                 case .failure(let error):
-                    print("[fetchOAuthToken]: Ошибка запроса: \(error.localizedDescription)")
+                    print("❌ [fetchOAuthToken]: Ошибка запроса: \(error.localizedDescription)")
                     completion(.failure(error as? NetworkError ?? .urlSessionError))
                 }
                 self?.lastCode = nil
@@ -53,7 +53,7 @@ final class OAuth2Service {
 
     private func makeOAuthTokenRequest(code: String) -> URLRequest? {
         guard var urlComponents = URLComponents(string: "https://unsplash.com/oauth/token") else {
-            assertionFailure("Failed to create URL")
+            assertionFailure("❌ [makeOAuthTokenRequest]: Ошибка при создании URLComponents")
             return nil
         }
         

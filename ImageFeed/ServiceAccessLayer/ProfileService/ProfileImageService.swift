@@ -1,25 +1,5 @@
 import UIKit
 
-struct ProfileImage: Codable {
-    let small: String
-    let medium: String
-    let large: String
-    
-    private enum CodingKeys: String, CodingKey {
-        case small
-        case medium
-        case large
-    }
-}
-
-struct UserResult: Codable {
-    let profileImage: ProfileImage
-    
-    enum CodingKeys: String, CodingKey {
-        case profileImage = "profile_image"
-    }
-}
-
 final class ProfileImageService {
     static let shared = ProfileImageService()
     private init() { }
@@ -43,7 +23,6 @@ final class ProfileImageService {
             completion(.failure(URLError(.badURL)))
             return
         }
-        
         print("[fetchProfileImageURL]:Отправка запроса: \(request.url?.absoluteString ?? "nil")")
         
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
@@ -66,7 +45,6 @@ final class ProfileImageService {
                 completion(.failure(error))
             }
         }
-        
         self.task = task
         task.resume()
     }
@@ -82,5 +60,9 @@ final class ProfileImageService {
         request.httpMethod = "GET"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
+    }
+    
+    func cleanAvatarURL() {
+        avatarURL = nil
     }
 }

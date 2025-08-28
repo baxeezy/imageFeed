@@ -20,6 +20,19 @@ final class AuthViewController: UIViewController {
         configureBackButton()
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == showWebViewSegueIdentifier {
+            guard
+                let webViewViewController = segue.destination as? WebViewViewController
+            else {
+                assertionFailure("Failed to prepare for \(showWebViewSegueIdentifier)")
+                return
+            }
+            webViewViewController.delegate = self
+        } else {
+            super.prepare(for: segue, sender: sender)
+        }
+    }
     // MARK: - IBActions
     @IBAction private func didTapLogoButton() {
     }
@@ -46,6 +59,7 @@ extension AuthViewController: WebViewViewControllerDelegate {
                     self.delegate?.didAuthenticate(self)
                     print("✅ Токен получен: \(token)")
                 case .failure(let error):
+                    self.showAuthErrorAlert()
                     print("🛑 Ошибка получения токена: \(error)")
                 }
             }

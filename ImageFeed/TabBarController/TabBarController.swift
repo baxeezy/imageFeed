@@ -1,7 +1,9 @@
 import UIKit
 
+// MARK: - TabBarController
 final class TabBarController: UITabBarController {
     
+    // MARK: - Lifecycle
     override func awakeFromNib() {
         super.awakeFromNib()
         
