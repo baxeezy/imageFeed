@@ -1,5 +1,9 @@
 import UIKit
-import ProgressHUD
+
+// MARK: - AuthViewControllerDelegate
+protocol AuthViewControllerDelegate: AnyObject {
+    func didAuthenticate(_ vc: AuthViewController)
+}
 
 // MARK: - AuthViewController
 final class AuthViewController: UIViewController {
@@ -28,6 +32,9 @@ final class AuthViewController: UIViewController {
                 assertionFailure("Failed to prepare for \(showWebViewSegueIdentifier)")
                 return
             }
+            let webViewPresenter = WebViewPresenter()
+            webViewViewController.presenter = webViewPresenter
+            webViewPresenter.view = webViewViewController
             webViewViewController.delegate = self
         } else {
             super.prepare(for: segue, sender: sender)
@@ -69,11 +76,6 @@ extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
         vc.dismiss(animated: true)
     }
-}
-
-// MARK: - AuthViewControllerDelegate
-protocol AuthViewControllerDelegate: AnyObject {
-    func didAuthenticate(_ vc: AuthViewController)
 }
 
 extension AuthViewController  {

@@ -18,7 +18,7 @@ final class ImagesListService {
     static let didChangeNotification = Notification.Name("ImagesListServiceDidChange")
 
     // MARK: - Public Methods
-    func fetchPhotosNextPage(completion: @escaping (Result<String, Error>) -> Void) {
+    func fetchPhotosNextPage(completion: @escaping (Result<[Photo], Error>) -> Void) {
         task?.cancel()
         
         let nextPage = (lastLoadedPage ?? 0) + 1
@@ -58,6 +58,8 @@ final class ImagesListService {
                 DispatchQueue.main.async {
                     self.lastLoadedPage = nextPage
                     self.photos.append(contentsOf: newPhotos)
+                    
+                    completion(.success(newPhotos))
                     
                     NotificationCenter.default.post(
                         name: ImagesListService.didChangeNotification,
