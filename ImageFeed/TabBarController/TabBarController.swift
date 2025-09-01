@@ -7,19 +7,36 @@ final class TabBarController: UITabBarController {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        setupViewControllers()
+    }
+    
+    // MARK: - Private Methods
+    private func setupViewControllers() {
+        viewControllers = [createImagesListVC(), createProfileVC()]
+    }
+    
+    private func createImagesListVC() -> UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: .main)
         
         let imagesListViewController = storyboard.instantiateViewController(
             withIdentifier: "ImagesListViewController"
         )
         
+        return imagesListViewController
+    }
+    
+    private func createProfileVC() -> UIViewController {
         let profileViewController = ProfileViewController()
+        
+        let presenter = ProfilePresenter()
+        profileViewController.configure(with: presenter)
+        
         profileViewController.tabBarItem = UITabBarItem(
             title: "",
             image: UIImage(named: "tab_profile_active"),
             selectedImage: nil
         )
         
-        self.viewControllers = [imagesListViewController, profileViewController]
+        return profileViewController
     }
 }

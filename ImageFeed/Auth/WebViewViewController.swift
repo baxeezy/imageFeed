@@ -1,13 +1,13 @@
 import UIKit
 import WebKit
 
-//MARK: - WebViewViewControllerDelegate
+// MARK: - WebViewViewControllerDelegate
 protocol WebViewViewControllerDelegate: AnyObject {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String)
     func webViewViewControllerDidCancel(_ vc: WebViewViewController)
 }
 
-//MARK: - WebViewViewControllerProtocol
+// MARK: - WebViewViewControllerProtocol
 public protocol WebViewViewControllerProtocol: AnyObject {
     var presenter: WebViewPresenterProtocol? { get set }
     func load(request: URLRequest)
@@ -15,23 +15,23 @@ public protocol WebViewViewControllerProtocol: AnyObject {
     func setProgressHidden(_ isHidden: Bool)
 }
 
-//MARK: - WebViewViewController
+// MARK: - WebViewViewController
 final class WebViewViewController: UIViewController & WebViewViewControllerProtocol {
     
-    //MARK: - IBOutlets
+    // MARK: - IBOutlets
     @IBOutlet private var webView: WKWebView!
     @IBOutlet private var progressView: UIProgressView!
     
-    //MARK: - IBAction
+    // MARK: - IBAction
     @IBAction func didTapBackButton(_ sender: Any?) {
         delegate?.webViewViewControllerDidCancel(self)
     }
     
-    //MARK: - Properties
+    // MARK: - Properties
     weak var delegate: WebViewViewControllerDelegate?
     var presenter: WebViewPresenterProtocol?
     
-    //MARK: - Lifecycle
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -62,9 +62,8 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
         }
     }
 
-    //MARK: - Public Methods
-    
-    func setProgressValue(_ newValue: Float) {
+    // MARK: - Public Methods
+        func setProgressValue(_ newValue: Float) {
         progressView.progress = newValue
     }
 
@@ -77,7 +76,7 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     }
 }
 
-//MARK: - WKNavigationDelegate
+// MARK: - WKNavigationDelegate
 extension WebViewViewController: WKNavigationDelegate {
     func webView(
         _ webView: WKWebView,

@@ -1,6 +1,6 @@
 import UIKit
 
-//MARK: - WebViewPresenterProtocol
+// MARK: - WebViewPresenterProtocol
 public protocol WebViewPresenterProtocol {
     func viewDidLoad()
     func didUpdateProgressValue(_ newValue: Double)
@@ -8,18 +8,19 @@ public protocol WebViewPresenterProtocol {
     var view: WebViewViewControllerProtocol? { get set }
 }
 
-//MARK: - WebViewPresenter
+// MARK: - WebViewPresenter
 final class WebViewPresenter: WebViewPresenterProtocol {
 
-    //MARK: - Properties
+    // MARK: - Properties
     weak var view: WebViewViewControllerProtocol?
     var authHelper: AuthHelperProtocol
     
+    // MARK: - Initialization
     init(authHelper: AuthHelperProtocol) {
         self.authHelper = authHelper
     }
     
-    //MARK: - Public Methods
+    // MARK: - Public Methods
     func viewDidLoad() {
         guard let request  = authHelper.authRequest() else { return }
         
@@ -33,7 +34,6 @@ final class WebViewPresenter: WebViewPresenterProtocol {
         
         let shouldHideProgress = shouldHideProgress(for: newProgressValue)
         view?.setProgressHidden(shouldHideProgress)
-        
     }
     
     func shouldHideProgress(for value: Float) -> Bool {

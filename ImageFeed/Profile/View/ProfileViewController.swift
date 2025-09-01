@@ -2,84 +2,87 @@ import UIKit
 import Kingfisher
 
 // MARK: - ProfileViewController
-final class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController & ProfileViewControllerProtocol {
     
-    // MARK: - Private Properties
+    // MARK: - UI Elements
     private var avatarImageView: UIImageView!
     private var profileName: UILabel!
     private var profileNickname: UILabel!
     private var profileDescription: UILabel!
     private var logoutButton: UIButton!
     
-    private let profileService = ProfileService.shared
-    
+    // MARK: - Private Properties
+    weak var delegate: ProfileViewControllerDelegate?
+    private var presenter: ProfileViewPresenterProtocol!
     private var profileImageServiceObserver: NSObjectProtocol?
     
+    // MARK: - Configuration Method
+    func configure(with presenter: ProfileViewPresenterProtocol) {
+        self.presenter = presenter
+        presenter.view = self
+    }
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         createUI()
         setupConstraints()
         
-        if let profile = profileService.profile {
-            updateProfileDetails(profile: profile)
+        guard presenter != nil else {
+            fatalError("❌ [ProfileViewController.viewDidLoad]: Неправильная настройка профиля")
         }
-        
-        profileImageServiceObserver = NotificationCenter.default
-            .addObserver(
-                forName: ProfileImageService.didChangeNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                print("Получено уведомление об изменении аватарки")
-                guard let self = self else { return }
-                self.updateAvatar()
-            }
-        updateAvatar()
+        presenter.viewDidLoad()
     }
     
-    // MARK: - Private Methods
-    @objc private func didTapLogoutButton() {
-        showLogoutAlert()
+    // MARK: - Public Methods
+    func updateProfileDetails(name: String, nickname: String, description: String) {
+        profileName.text = name.isEmpty ? "Имя не указано" : name
+        profileNickname.text = nickname.isEmpty ? "@неизвестный_пользователь" : nickname
+        profileDescription.text = description.isEmpty ? "Профиль не заполнен" : description
     }
     
-    private func updateAvatar() {
-        guard let profileImageURL = ProfileImageService.shared.avatarURL else {
-            print("[updateAvatar]: avatarURL равен nil")
-            return
-        }
-        guard let imageUrl = URL(string: profileImageURL) else {
-            print("[updateAvatar]: неверный URL аватарки - \(profileImageURL)")
-            return
-        }
-        
-        print("imageUrl: \(imageUrl)")
-        
+    func updateAvatar(with url: URL?) {
         let placeholderImage = UIImage(systemName: "person.circle.fill")?
             .withTintColor(.lightGray, renderingMode: .alwaysOriginal)
             .withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large))
         
+        guard let url = url else {
+            avatarImageView.image = placeholderImage
+            return
+        }
+        
         let processor = RoundCornerImageProcessor(cornerRadius: 35)
         avatarImageView.kf.indicatorType = .activity
         avatarImageView.kf.setImage(
-            with: imageUrl,
+            with: url,
             placeholder: placeholderImage,
             options: [
                 .processor(processor),
                 .scaleFactor(UIScreen.main.scale),
                 .cacheOriginalImage,
                 .forceRefresh
-            ]) { result in
-                switch result {
-                case .success(let value):
-                    print(value.image)
-                    print(value.cacheType)
-                    print(value.source)
-                    
-                case .failure(let error):
-                    print(error)
-                }
-            }
+            ]
+        )
+    }
+    
+    func showLogoutConfirmation() {
+        let alertController = UIAlertController(
+            title: "Пока, пока!",
+            message: "Уверены, что хотите выйти?",
+            preferredStyle: .alert
+        )
+        let noAction = UIAlertAction(title: "Нет", style: .cancel) { _ in }
+        let yesAction = UIAlertAction(title: "Да", style: .default) { _ in
+            ProfileLogoutService.shared.logout()
+        }
+        
+        alertController.addAction(noAction)
+        alertController.addAction(yesAction)
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    // MARK: - Private Methods
+    @objc private func didTapLogoutButton() {
+        presenter?.didTapLogoutButton()
     }
     
     private func updateProfileDetails(profile: Profile) {
@@ -93,6 +96,7 @@ final class ProfileViewController: UIViewController {
         ? "Профиль не заполнен"
         : profile.bio
     }
+    
     private func createUI() {
         view.backgroundColor = UIColor(named: "YP Black")
         createAvatarImageView()
@@ -203,21 +207,5 @@ final class ProfileViewController: UIViewController {
             logoutButton.heightAnchor.constraint(equalToConstant: 44),
             logoutButton.widthAnchor.constraint(equalToConstant: 44)
         ])
-    }
-    
-    private func showLogoutAlert() {
-        let alertController = UIAlertController(
-            title: "Пока, пока!",
-            message: "Уверены, что хотите выйти?",
-            preferredStyle: .alert
-        )
-        let noAction = UIAlertAction(title: "Нет", style: .cancel) { _ in }
-        let yesAction = UIAlertAction(title: "Да", style: .default) { _ in
-            ProfileLogoutService.shared.logout()
-        }
-
-        alertController.addAction(noAction)
-        alertController.addAction(yesAction)
-        present(alertController, animated: true, completion: nil)
     }
 }

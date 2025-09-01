@@ -1,7 +1,7 @@
 import UIKit
 import Kingfisher
 
-//MARK: - ImagesListViewController
+// MARK: - ImagesListViewController
 final class ImagesListViewController: UIViewController {
     
     // MARK: - IBOutlets
@@ -56,7 +56,6 @@ extension ImagesListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath)
-        
         guard let imageListCell = cell as? ImagesListCell else {
             print("❌ [tableView: cellForRowAt]: Удаленная из очереди ячейка не является экземпляром ImagesListCell")
             return UITableViewCell()
@@ -122,7 +121,7 @@ extension ImagesListViewController {
                     print(value.source)
                     
                 case .failure(let error):
-                    print("[configCell]: Ошибка загрузки изображения: \(error)")
+                    print("❌ [configCell]: Ошибка загрузки изображения: \(error)")
                 }
             }
         cell.dateLabel.text = dateFormatter.string(from: photo.createdAt ?? Date())
