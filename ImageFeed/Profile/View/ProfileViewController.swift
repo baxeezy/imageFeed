@@ -13,7 +13,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
     
     // MARK: - Private Properties
     weak var delegate: ProfileViewControllerDelegate?
-    var presenter: ProfileViewPresenterProtocol!
+    var presenter: ProfileViewPresenterProtocol?
     private var profileImageServiceObserver: NSObjectProtocol?
     
     // MARK: - Configuration Method
@@ -30,10 +30,10 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         guard presenter != nil else {
             fatalError("❌ [ProfileViewController.viewDidLoad]: Неправильная настройка профиля")
         }
-        presenter.viewDidLoad()
+        presenter?.viewDidLoad()
     }
     
-    // MARK: - Public Methods
+    // MARK: - ProfileViewControllerProtocol
     func updateProfileDetails(name: String, nickname: String, description: String) {
         profileName.text = name.isEmpty ? "Имя не указано" : name
         profileNickname.text = nickname.isEmpty ? "@неизвестный_пользователь" : nickname

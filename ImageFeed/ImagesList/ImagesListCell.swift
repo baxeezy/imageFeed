@@ -29,3 +29,10 @@ final class ImagesListCell: UITableViewCell {
         likeButton.setImage(likeImage, for: .normal)
     }
 }
+
+extension ImagesListCell {
+    var indexPath: IndexPath? {
+        guard let tableView = superview as? UITableView else { return nil }
+        return tableView.indexPath(for: self)
+    }
+}

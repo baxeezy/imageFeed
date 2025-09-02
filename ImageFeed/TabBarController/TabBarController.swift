@@ -18,8 +18,20 @@ final class TabBarController: UITabBarController {
     private func createImagesListVC() -> UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: .main)
         
-        let imagesListViewController = storyboard.instantiateViewController(
+        guard let imagesListViewController = storyboard.instantiateViewController(
             withIdentifier: "ImagesListViewController"
+        ) as? ImagesListViewController else {
+            return UIViewController()
+        }
+        
+        let presenter = ImagesListPresenter(imagesListService: ImagesListService.shared)
+        imagesListViewController.presenter = presenter
+        presenter.view = imagesListViewController
+        
+        imagesListViewController.tabBarItem = UITabBarItem(
+            title: "",
+            image: UIImage(named: "tab_editorial_active"),
+            selectedImage: nil
         )
         
         return imagesListViewController

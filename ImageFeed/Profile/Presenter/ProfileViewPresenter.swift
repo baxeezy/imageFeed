@@ -13,7 +13,7 @@ final class ProfilePresenter: ProfileViewPresenterProtocol {
         self.profileService = profileService
     }
     
-    // MARK: - Public Methods
+    // MARK: - ProfileViewPresenterProtocol
     func viewDidLoad() {
         setupObservers()
         loadInitialData()
