@@ -62,11 +62,14 @@ final class ImagesListPresenter: @preconcurrency ImagesListPresenterProtocol {
         return imageSize.height * scale + imageInsets.top + imageInsets.bottom
     }
     
-    @MainActor func configCell(_ cell: ImagesListCell, with indexPath: IndexPath) {
+    @MainActor func configCell(_ cell: ImagesListCellProtocol, with indexPath: IndexPath) {
         let photo = photos[indexPath.row]
         let placeholderImage = UIImage(named: "placeholder_stub")
         
-        cell.delegate = self
+        if let imagesListCell = cell as? ImagesListCell {
+            imagesListCell.delegate = self
+        }
+        
         cell.cellImage.kf.indicatorType = .activity
         (cell.cellImage.kf.indicator?.view as? UIActivityIndicatorView)?.color = .white
         
@@ -83,7 +86,7 @@ final class ImagesListPresenter: @preconcurrency ImagesListPresenterProtocol {
         cell.setIsLiked(photo.isLiked)
     }
     
-    func didTapLike(for cell: ImagesListCell) {
+    func didTapLike(for cell: ImagesListCellProtocol) {
         guard let indexPath = cell.indexPath else { return }
         let photo = photos[indexPath.row]
         

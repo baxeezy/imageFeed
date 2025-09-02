@@ -3,23 +3,47 @@ import Kingfisher
 
 // MARK: - ImagesListViewController
 final class ImagesListViewController: UIViewController & ImagesListViewControllerProtocol {
-    
-    // MARK: - IBOutlet
-    @IBOutlet weak private var tableView: UITableView!
-    
-    // MARK: - Property
+      
+    // MARK: - Properties
     var presenter: ImagesListPresenterProtocol?
     
+    private lazy var tableView: UITableView = {
+            let tableView = UITableView()
+            tableView.translatesAutoresizingMaskIntoConstraints = false
+            tableView.backgroundColor = .ypBlack
+            tableView.separatorStyle = .none
+            tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            return tableView
+        }()
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.dataSource = self
-        tableView.delegate = self
+        setupUI()
+        setupTableView()
         
         guard presenter != nil else {
             fatalError("❌ [ImagesListViewController.viewDidLoad]: Неправильная настройка ленты фотографий")
         }
         presenter?.viewDidLoad()
+    }
+    
+    // MARK: - Private Methods
+    private func setupUI() {
+        view.backgroundColor = .ypBlack
+        view.addSubview(tableView)
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+    
+    private func setupTableView() {
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(ImagesListCell.self, forCellReuseIdentifier: ImagesListCell.reuseIdentifier)
     }
     
     // MARK: - ImagesListViewControllerProtocol

@@ -4,9 +4,10 @@ import UIKit
 final class TabBarController: UITabBarController {
     
     // MARK: - Lifecycle
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
+        setupTabBarAppearance()
         setupViewControllers()
     }
     
@@ -15,40 +16,59 @@ final class TabBarController: UITabBarController {
         viewControllers = [createImagesListVC(), createProfileVC()]
     }
     
-    private func createImagesListVC() -> UIViewController {
-        let storyboard = UIStoryboard(name: "Main", bundle: .main)
-        
-        guard let imagesListViewController = storyboard.instantiateViewController(
-            withIdentifier: "ImagesListViewController"
-        ) as? ImagesListViewController else {
-            return UIViewController()
+    private func setupTabBarAppearance() {
+            let appearance = UITabBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = .ypBlack
+            
+            appearance.stackedLayoutAppearance.normal.iconColor = .ypGray
+            appearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.ypGray]
+            
+            appearance.stackedLayoutAppearance.selected.iconColor = .ypWhite
+            appearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor.ypWhite]
+            
+            tabBar.standardAppearance = appearance
+            if #available(iOS 15.0, *) {
+                tabBar.scrollEdgeAppearance = appearance
+            }
+            
+            tabBar.tintColor = .ypWhite
+            tabBar.unselectedItemTintColor = .ypGray
+            tabBar.isTranslucent = false
         }
-        
+    
+    private func createImagesListVC() -> UIViewController {
+        let imagesListViewController = ImagesListViewController()
         let presenter = ImagesListPresenter(imagesListService: ImagesListService.shared)
         imagesListViewController.presenter = presenter
         presenter.view = imagesListViewController
         
-        imagesListViewController.tabBarItem = UITabBarItem(
+        let navigationController = UINavigationController(rootViewController: imagesListViewController)
+        navigationController.navigationBar.isHidden = true
+        
+        navigationController.tabBarItem = UITabBarItem(
             title: "",
             image: UIImage(named: "tab_editorial_active"),
             selectedImage: nil
         )
         
-        return imagesListViewController
+        return navigationController
     }
     
     private func createProfileVC() -> UIViewController {
         let profileViewController = ProfileViewController()
-        
         let presenter = ProfilePresenter()
         profileViewController.configure(with: presenter)
         
-        profileViewController.tabBarItem = UITabBarItem(
+        let navigationController = UINavigationController(rootViewController: profileViewController)
+        navigationController.navigationBar.isHidden = true
+        
+        navigationController.tabBarItem = UITabBarItem(
             title: "",
             image: UIImage(named: "tab_profile_active"),
             selectedImage: nil
         )
         
-        return profileViewController
+        return navigationController
     }
 }

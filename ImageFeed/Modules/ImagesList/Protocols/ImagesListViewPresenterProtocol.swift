@@ -1,6 +1,6 @@
 import UIKit
 
-protocol ImagesListPresenterProtocol: AnyObject {
+public protocol ImagesListPresenterProtocol: AnyObject {
     var view: ImagesListViewControllerProtocol? { get set }
     func viewDidLoad()
     func didSelectRowAt(indexPath: IndexPath)
@@ -8,6 +8,6 @@ protocol ImagesListPresenterProtocol: AnyObject {
     func numberOfRows() -> Int
     func photo(at indexPath: IndexPath) -> Photo
     func heightForRowAt(indexPath: IndexPath, tableViewWidth: CGFloat) -> CGFloat
-    func configCell(_ cell: ImagesListCell, with indexPath: IndexPath)
-    func didTapLike(for cell: ImagesListCell)
+    func configCell(_ cell: ImagesListCellProtocol, with indexPath: IndexPath)
+    func didTapLike(for cell: ImagesListCellProtocol)
 }

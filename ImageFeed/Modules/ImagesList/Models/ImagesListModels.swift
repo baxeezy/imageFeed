@@ -1,6 +1,6 @@
 import UIKit
 
-struct Photo {
+public struct Photo {
     let id: String
     let size: CGSize
     let createdAt: Date?
@@ -10,7 +10,7 @@ struct Photo {
     let isLiked: Bool
 }
 
-struct PhotoResult: Codable {
+public struct PhotoResult: Codable {
     let id: String
     let createdAt: String?
     let width: Int
@@ -19,7 +19,7 @@ struct PhotoResult: Codable {
     let likedByUser: Bool
     let urls: UrlsResult
     
-    private enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, CodingKey {
         case id
         case createdAt = "created_at"
         case width
@@ -30,7 +30,7 @@ struct PhotoResult: Codable {
     }
 }
 
-struct UrlsResult: Codable {
+public struct UrlsResult: Codable {
     let raw: String
     let full: String
     let regular: String
@@ -38,6 +38,6 @@ struct UrlsResult: Codable {
     let thumb: String
 }
   
-struct LikeResult: Codable {
+public struct LikeResult: Codable {
     let photo: PhotoResult
 }
