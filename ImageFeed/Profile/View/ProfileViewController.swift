@@ -13,7 +13,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
     
     // MARK: - Private Properties
     weak var delegate: ProfileViewControllerDelegate?
-    private var presenter: ProfileViewPresenterProtocol!
+    var presenter: ProfileViewPresenterProtocol!
     private var profileImageServiceObserver: NSObjectProtocol?
     
     // MARK: - Configuration Method
@@ -80,23 +80,10 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         present(alertController, animated: true, completion: nil)
     }
     
-    // MARK: - Private Methods
-    @objc private func didTapLogoutButton() {
+    @objc func didTapLogoutButton() {
         presenter?.didTapLogoutButton()
     }
-    
-    private func updateProfileDetails(profile: Profile) {
-        profileName.text = profile.name.isEmpty
-        ? "Имя не указано"
-        : profile.name
-        profileNickname.text = profile.loginName.isEmpty
-        ? "@неизвестный_пользователь"
-        : profile.loginName
-        profileDescription.text = (profile.bio?.isEmpty ?? true)
-        ? "Профиль не заполнен"
-        : profile.bio
-    }
-    
+    // MARK: - Private Methods
     private func createUI() {
         view.backgroundColor = UIColor(named: "YP Black")
         createAvatarImageView()

@@ -1,6 +1,6 @@
 import UIKit
 
-protocol ProfileViewPresenterProtocol: AnyObject {
+public protocol ProfileViewPresenterProtocol: AnyObject {
     var view: ProfileViewControllerProtocol? { get set }
     func viewDidLoad()
     func didTapLogoutButton()
