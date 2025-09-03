@@ -7,7 +7,7 @@ final class ImagesListViewController: UIViewController & ImagesListViewControlle
     // MARK: - Properties
     var presenter: ImagesListPresenterProtocol?
     
-    private lazy var tableView: UITableView = {
+    lazy var tableView: UITableView = {
             let tableView = UITableView()
             tableView.translatesAutoresizingMaskIntoConstraints = false
             tableView.backgroundColor = .ypBlack
