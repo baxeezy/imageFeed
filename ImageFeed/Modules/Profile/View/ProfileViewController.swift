@@ -70,10 +70,12 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
             message: "Уверены, что хотите выйти?",
             preferredStyle: .alert
         )
+        alertController.view.accessibilityIdentifier = "Bye bye!"
         let noAction = UIAlertAction(title: "Нет", style: .cancel) { _ in }
         let yesAction = UIAlertAction(title: "Да", style: .default) { _ in
             ProfileLogoutService.shared.logout()
         }
+        yesAction.accessibilityIdentifier = "Yes"
         
         alertController.addAction(noAction)
         alertController.addAction(yesAction)
@@ -184,6 +186,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
         
         logoutButton.tintColor = UIColor(named: "YP red")
+        logoutButton.accessibilityIdentifier = "logout button"
         self.logoutButton = logoutButton
     }
     

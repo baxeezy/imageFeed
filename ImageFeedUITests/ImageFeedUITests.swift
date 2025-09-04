@@ -15,15 +15,15 @@ final class Image_FeedUITests: XCTestCase {
         let webView = app.webViews["UnsplashWebView"]
         
         XCTAssertTrue(webView.waitForExistence(timeout: 5))
-
+        
         let loginTextField = webView.descendants(matching: .textField).element
         XCTAssertTrue(loginTextField.waitForExistence(timeout: 5))
         
         loginTextField.tap()
         loginTextField.typeText("login")
         let tapPoint = webView.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
-            tapPoint.tap()
-            webView.swipeUp()
+        tapPoint.tap()
+        webView.swipeUp()
         
         let passwordTextField = webView.descendants(matching: .secureTextField).element
         XCTAssertTrue(passwordTextField.waitForExistence(timeout: 5))
@@ -47,7 +47,7 @@ final class Image_FeedUITests: XCTestCase {
         let cell = tablesQuery.children(matching: .cell).element(boundBy: 0)
         cell.swipeUp()
         sleep(2)
-
+        
         let cellToLike = tablesQuery.children(matching: .cell).element(boundBy: 2)
         
         cellToLike.buttons["like button off"].tap()
@@ -74,9 +74,9 @@ final class Image_FeedUITests: XCTestCase {
     func testProfile() throws {
         sleep(3)
         app.tabBars.buttons.element(boundBy: 1).tap()
-       
-        XCTAssertTrue(app.staticTexts["Name Lastname"].exists)
-        XCTAssertTrue(app.staticTexts["@username"].exists)
+        
+        XCTAssertTrue(app.staticTexts["Екатерина Новикова"].exists)
+        XCTAssertTrue(app.staticTexts["@ekaterina_nov"].exists)
         
         app.buttons["logout button"].tap()
         
