@@ -1,29 +1,20 @@
 import UIKit
 
 // MARK: - ImagesListPresenter
-final class ImagesListPresenter: @preconcurrency ImagesListPresenterProtocol {
+final class ImagesListPresenter: ImagesListPresenterProtocol {
     
     // MARK: - Private Properties
     weak var view: ImagesListViewControllerProtocol?
     private let imagesListService: ImagesListService
     private var notificationCenter: NotificationCenter
     private var imagesListServiceObserver: NSObjectProtocol?
-    private var previousPhotosCount = 0
     private var photos: [Photo] = []
-    
-    private lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .none
-        return formatter
-    }()
     
     // MARK: - Initialization
     init(imagesListService: ImagesListService = ImagesListService.shared,
          notificationCenter: NotificationCenter = .default) {
         self.imagesListService = imagesListService
         self.notificationCenter = notificationCenter
-        self.previousPhotosCount = imagesListService.photos.count
         self.photos = imagesListService.photos
     }
     
@@ -62,35 +53,20 @@ final class ImagesListPresenter: @preconcurrency ImagesListPresenterProtocol {
         return imageSize.height * scale + imageInsets.top + imageInsets.bottom
     }
     
-    @MainActor func configCell(_ cell: ImagesListCellProtocol, with indexPath: IndexPath) {
+    func cellData(for indexPath: IndexPath) -> ImagesListCellData {
         let photo = photos[indexPath.row]
-        let placeholderImage = UIImage(named: "placeholder_stub")
-        
-        if let imagesListCell = cell as? ImagesListCell {
-            imagesListCell.delegate = self
-        }
-        
-        cell.cellImage.kf.indicatorType = .activity
-        (cell.cellImage.kf.indicator?.view as? UIActivityIndicatorView)?.color = .white
-        
-        cell.cellImage.kf.setImage(
-            with: URL(string: photo.largeImageURL),
-            placeholder: placeholderImage,
-            options: [
-                .scaleFactor(UIScreen.main.scale),
-                .cacheOriginalImage,
-                .forceRefresh
-            ])
-        
-        cell.dateLabel.text = dateFormatter.string(from: photo.createdAt ?? Date())
-        cell.setIsLiked(photo.isLiked)
+        return ImagesListCellData(
+            imageURL: URL(string: photo.largeImageURL),
+            createdAt: photo.createdAt,
+            isLiked: photo.isLiked,
+            indexPath: indexPath
+        )
     }
     
-    func didTapLike(for cell: ImagesListCellProtocol) {
-        guard let indexPath = cell.indexPath else { return }
+    func didTapLike(for indexPath: IndexPath) {
         let photo = photos[indexPath.row]
         
-        UIBlockingProgressHUD.show()
+        view?.showLoadingIndicator(true)
         imagesListService.changeLike(
             photoId: photo.id,
             isLike: !photo.isLiked
@@ -98,17 +74,18 @@ final class ImagesListPresenter: @preconcurrency ImagesListPresenterProtocol {
             guard let self = self else { return }
             
             DispatchQueue.main.async {
+                self.view?.showLoadingIndicator(false)
+                
                 switch result {
                 case .success(let updatedPhoto):
                     self.photos[indexPath.row] = updatedPhoto
-                    cell.setIsLiked(updatedPhoto.isLiked)
-                    UIBlockingProgressHUD.dismiss()
+                    self.view?.updateLikeStatus(at: indexPath, isLiked: updatedPhoto.isLiked)
                     
                 case .failure(let error):
-                    UIBlockingProgressHUD.dismiss()
                     print("Ошибка изменения лайка: \(error.localizedDescription)")
                     self.view?.showLikeErrorAlert()
-                    cell.setIsLiked(photo.isLiked)
+                    // Возвращаем предыдущее состояние
+                    self.view?.updateLikeStatus(at: indexPath, isLiked: photo.isLiked)
                 }
             }
         }
@@ -132,7 +109,7 @@ final class ImagesListPresenter: @preconcurrency ImagesListPresenterProtocol {
     private func handlePhotosUpdate() {
         let newPhotosFromService = imagesListService.photos
         
-        // Фильтруем только новые уникальные фото (как в рабочем коде)
+        // Фильтруем только новые уникальные фото
         let newUniquePhotos = newPhotosFromService.filter { newPhoto in
             !photos.contains { $0.id == newPhoto.id }
         }
@@ -144,13 +121,5 @@ final class ImagesListPresenter: @preconcurrency ImagesListPresenterProtocol {
         let newCount = photos.count
         
         view?.updateTableViewAnimated(oldCount: oldCount, newCount: newCount)
-        previousPhotosCount = newCount
-    }
-}
-
-// MARK: - ImagesListCellDelegate
-extension ImagesListPresenter: ImagesListCellDelegate {
-    func imagesListCellDidTapLike(_ cell: ImagesListCell) {
-        didTapLike(for: cell)
     }
 }

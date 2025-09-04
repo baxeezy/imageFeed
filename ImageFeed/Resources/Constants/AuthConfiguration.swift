@@ -8,7 +8,6 @@ enum Constants {
     
     static let defaultBaseURL = URL(string: "https://api.unsplash.com")!
     static let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
-
 }
 
 struct AuthConfiguration {
@@ -29,21 +28,11 @@ struct AuthConfiguration {
     }
     
     static var standard: AuthConfiguration {
-            return AuthConfiguration(accessKey: Constants.accessKey,
-                                     secretKey: Constants.secretKey,
-                                     redirectURI: Constants.redirectURI,
-                                     accessScope: Constants.accessScope,
-                                     authURLString: Constants.unsplashAuthorizeURLString,
-                                     defaultBaseURL: Constants.defaultBaseURL)
-        }
+        return AuthConfiguration(accessKey: Constants.accessKey,
+                                 secretKey: Constants.secretKey,
+                                 redirectURI: Constants.redirectURI,
+                                 accessScope: Constants.accessScope,
+                                 authURLString: Constants.unsplashAuthorizeURLString,
+                                 defaultBaseURL: Constants.defaultBaseURL)
+    }
 }
-
-// Второй акк для запросов
-//enum Constants {
-//    static let accessKey = "aiJCy-QT8b97cRhn-wvKHdCxM5RIfEv8Owg95Uk2S40"
-//    static let secretKey = "GBhkbuu5X1JKpKZ1LzZnZ-F7KHUBQpxcZZ4m2T-Hs2c"
-//    static let redirectURI = "urn:ietf:wg:oauth:2.0:oob"
-//    static let accessScope = "public+read_user+write_likes"
-//    static let defaultBaseURL = URL(string: "https://api.unsplash.com")!
-//    static let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
-//}

@@ -41,3 +41,10 @@ public struct UrlsResult: Codable {
 public struct LikeResult: Codable {
     let photo: PhotoResult
 }
+
+public struct ImagesListCellData {
+    let imageURL: URL?
+    let createdAt: Date?
+    let isLiked: Bool
+    let indexPath: IndexPath
+}

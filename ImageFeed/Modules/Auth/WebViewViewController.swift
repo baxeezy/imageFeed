@@ -18,19 +18,14 @@ public protocol WebViewViewControllerProtocol: AnyObject {
 // MARK: - WebViewViewController
 final class WebViewViewController: UIViewController & WebViewViewControllerProtocol {
     
-    // MARK: - IBOutlets
-    @IBOutlet private var webView: WKWebView!
-    @IBOutlet private var progressView: UIProgressView!
-    
-    // MARK: - IBAction
-    @IBAction func didTapBackButton(_ sender: Any?) {
-        delegate?.webViewViewControllerDidCancel(self)
-    }
-    
     // MARK: - Properties
     weak var delegate: WebViewViewControllerDelegate?
     var presenter: WebViewPresenterProtocol?
     
+    // MARK: - IBOutlets
+    @IBOutlet private var webView: WKWebView!
+    @IBOutlet private var progressView: UIProgressView!
+ 
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,14 +36,14 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
+        
         webView.addObserver(
             self,
             forKeyPath: #keyPath(WKWebView.estimatedProgress),
             options: .new,
             context: nil)
     }
-
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), context: nil)
@@ -61,18 +56,23 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
     }
-
+    
     // MARK: - Public Methods
-        func setProgressValue(_ newValue: Float) {
+    func setProgressValue(_ newValue: Float) {
         progressView.progress = newValue
     }
-
+    
     func setProgressHidden(_ isHidden: Bool) {
         progressView.isHidden = isHidden
     }
     
     func load(request: URLRequest) {
         webView.load(request)
+    }
+    
+    // MARK: - IBAction
+    @IBAction private func didTapBackButton(_ sender: Any?) {
+        delegate?.webViewViewControllerDidCancel(self)
     }
 }
 

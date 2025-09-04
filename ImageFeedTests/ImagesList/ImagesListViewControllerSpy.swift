@@ -6,9 +6,14 @@ final class ImagesListViewControllerSpy: ImagesListViewControllerProtocol {
     var updateTableViewAnimatedCalled = false
     var showLikeErrorAlertCalled = false
     var showSingleImageCalled = false
+    var showLoadingIndicatorCalled = false
+    var updateLikeStatusCalled = false
     var oldCount: Int?
     var newCount: Int?
-    var shownPhoto: Photo?
+    var showPhoto: Photo?
+    var loadingIndicatorShow: Bool?
+    var likeUpdateIndexPath: IndexPath?
+    var likeUpdateStatus: Bool?
     
     func updateTableViewAnimated(oldCount: Int, newCount: Int) {
         updateTableViewAnimatedCalled = true
@@ -22,6 +27,17 @@ final class ImagesListViewControllerSpy: ImagesListViewControllerProtocol {
     
     func showSingleImage(for photo: Photo) {
         showSingleImageCalled = true
-        shownPhoto = photo
+        showPhoto = photo
+    }
+    
+    func showLoadingIndicator(_ show: Bool) {
+        showLoadingIndicatorCalled = true
+        loadingIndicatorShow = show
+    }
+    
+    func updateLikeStatus(at indexPath: IndexPath, isLiked: Bool) {
+        updateLikeStatusCalled = true
+        likeUpdateIndexPath = indexPath
+        likeUpdateStatus = isLiked
     }
 }

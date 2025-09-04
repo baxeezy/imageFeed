@@ -72,26 +72,26 @@ final class ImagesListCell: UITableViewCell & ImagesListCellProtocol {
     }
     
     private func setupConstraints() {
-            NSLayoutConstraint.activate([
-                imageContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-                imageContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-                imageContainer.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
-                imageContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
-                
-                cellImage.leadingAnchor.constraint(equalTo: imageContainer.leadingAnchor),
-                cellImage.trailingAnchor.constraint(equalTo: imageContainer.trailingAnchor),
-                cellImage.topAnchor.constraint(equalTo: imageContainer.topAnchor),
-                cellImage.bottomAnchor.constraint(equalTo: imageContainer.bottomAnchor),
-                
-                dateLabel.leadingAnchor.constraint(equalTo: imageContainer.leadingAnchor, constant: 8),
-                dateLabel.bottomAnchor.constraint(equalTo: imageContainer.bottomAnchor, constant: -8),
-                
-                likeButton.topAnchor.constraint(equalTo: imageContainer.topAnchor),
-                likeButton.trailingAnchor.constraint(equalTo: imageContainer.trailingAnchor),
-                likeButton.widthAnchor.constraint(equalToConstant: 44),
-                likeButton.heightAnchor.constraint(equalToConstant: 44)
-            ])
-        }
+        NSLayoutConstraint.activate([
+            imageContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            imageContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            imageContainer.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
+            imageContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
+            
+            cellImage.leadingAnchor.constraint(equalTo: imageContainer.leadingAnchor),
+            cellImage.trailingAnchor.constraint(equalTo: imageContainer.trailingAnchor),
+            cellImage.topAnchor.constraint(equalTo: imageContainer.topAnchor),
+            cellImage.bottomAnchor.constraint(equalTo: imageContainer.bottomAnchor),
+            
+            dateLabel.leadingAnchor.constraint(equalTo: imageContainer.leadingAnchor, constant: 8),
+            dateLabel.bottomAnchor.constraint(equalTo: imageContainer.bottomAnchor, constant: -8),
+            
+            likeButton.topAnchor.constraint(equalTo: imageContainer.topAnchor),
+            likeButton.trailingAnchor.constraint(equalTo: imageContainer.trailingAnchor),
+            likeButton.widthAnchor.constraint(equalToConstant: 44),
+            likeButton.heightAnchor.constraint(equalToConstant: 44)
+        ])
+    }
     
     private func configureAppearance() {
         contentView.backgroundColor = .ypBlack

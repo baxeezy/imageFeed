@@ -1,4 +1,4 @@
-import UIKit
+import Foundation
 
 // MARK: - WebViewPresenterProtocol
 public protocol WebViewPresenterProtocol {
